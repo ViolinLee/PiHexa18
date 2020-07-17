@@ -16,6 +16,8 @@ class Leg(object):
     def __init__(self, leg_index):
         self.__leg_index = leg_index
         self.__servos = [Servo(self.__leg_index, i) for i in range(3)]
+        self.__tip_pos = point3d()
+        self.__tip_pos_local = point3d()
 
         """ 
         local_conv: 世界坐标系上的表达转换到本地坐标系上的表达
@@ -47,7 +49,6 @@ class Leg(object):
             self.__world_conv = rotate135
 
 
-
     """coordinate system translation"""
     def translate2local(self, world_point: point3d):
         return self.__local_conv(world_point - self.__mount_position)
@@ -60,21 +61,29 @@ class Leg(object):
         self.move_tip_local(out_point)
 
     """word coordiante system (default)"""
-    def move_tip(self, target_point: point3d):
-        return
+    def move_tip(self, target_point_world: point3d):
+        if target_point_world == self.__tip_pos:
+            return
+        dest_local = self.translate2local(target_point_world)
+        # logging info
+        self.__move(dest_local)
+        self.__tip_pos = target_point_world
+        self.__tip_pos_local = dest_local
 
     def get_tip_position(self):
-        return
+        return self.__tip_pos
 
     """local coordinate system version"""
-    def move_tip_local(self, target_point: point3d):
-        return
+    def move_tip_local(self, target_point_local: point3d):
+        if target_point_local == self.__tip_pos_local:
+            return
+        dest_world = self.translate2world(target_point_local)
+        self.__move(target_point_local)
+        self.__tip_pos = dest_world
+        self.__tip_pos_local = target_point_local
 
     def get_tip_position_local(self):
-        return
-
-    def get(self, part_index):
-        return
+        return self.__tip_pos_local
 
     """forward and inverse kinematics calculations are below local coordinate"""
     def __forward_kinematics(self, angles):
