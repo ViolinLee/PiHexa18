@@ -2,11 +2,12 @@
 
 from servo import *
 from movement import *
+from leg import Leg
 
 
 class Hexapod(object):
     def __init__(self):
-        self.__legs = [0, 1, 2, 3, 4, 5]
+        self.__legs = [Leg(i) for i in range(6)]
         self.__movement = Movement(MovementMode.MOVEMENT_STANDBY)
         self.__mode = MovementMode.MOVEMENT_STANDBY
 
@@ -19,7 +20,11 @@ class Hexapod(object):
         if not setting:
             self.process_movement(MovementMode.MOVEMENT_STANDBY)
 
-    def process_movement(self, mode, elapsed):
+    def process_movement(self, mode, elapsed=0):  # 重要函数，与步态执行有关
         if self.__mode != mode:
             self.__mode = mode
             self.__movement.set_mode(self.__mode)
+
+        location = self.__movement.next(elapsed=elapsed)
+        for i in range(6):
+            self.__legs[i].move_tip(location.get(i))
