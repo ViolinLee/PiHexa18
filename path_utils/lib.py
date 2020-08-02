@@ -4,6 +4,7 @@ import numpy as np
 
 pi = math.pi
 
+
 # 步态是简单的半圆弧曲线
 def semicircle_generator(radius, steps, reverse=False):
     assert (steps % 4) == 0  # steps是啥？把一个圆分成多少步
@@ -41,7 +42,6 @@ def semicircle2_generator(steps, y_radius, z_radius, x_radius, reverse=False):
 
     step_angle = pi / half_steps
     step_y_stride = 2 * y_radius / half_steps
-
 
     result = []
 
