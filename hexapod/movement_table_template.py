@@ -1,25 +1,18 @@
 # -*- coding: utf-8 -*-
 
-from movement import MovementTable
-from movements import *
+from movement import *
 
 """
-This file is generated, dont directly modify content...
+自动生成
+表格样式：location数组
+[[[Point1_x, Point1_y, Point1_z],[Point1_x, Point1_y, Point1_z], ..., [Point1_x, Point1_y, Point1_z]],
+ [[Point1_x, Point1_y, Point1_z],[Point1_x, Point1_y, Point1_z], ..., [Point1_x, Point1_y, Point1_z]],
+ ...,
+ [[Point1_x, Point1_y, Point1_z],[Point1_x, Point1_y, Point1_z], ..., [Point1_x, Point1_y, Point1_z]]]
 """
-
 # 后退
-backward_paths = [locations(point3d(p1_x+0.0, p1_y+0.0, p1_z+0.0),
-                            point3d(p2_x+0.0, p2_y+0.0, p2_z+0.0),
-                            point3d(p3_x+0.0, p3_y+0.0, p3_z+0.0),
-                            point3d(p4_x+0.0, p4_y+0.0, p4_z+0.0),
-                            point3d(p5_x+0.0, p5_y+0.0, p5_z+0.0),
-                            point3d(p6_x+0.0, p6_y+0.0, p6_z+0.0)),
-                  locations(point3d(p1_x+0.0, p1_y+0.0, p1_z+0.0),
-                            point3d(p2_x+0.0, p2_y+0.0, p2_z+0.0),
-                            point3d(p3_x+0.0, p3_y+0.0, p3_z+0.0),
-                            point3d(p4_x+0.0, p4_y+0.0, p4_z+0.0),
-                            point3d(p5_x+0.0, p5_y+0.0, p5_z+0.0),
-                            point3d(p6_x+0.0, p6_y+0.0, p6_z+0.0))]
+backward_paths = [locations(point3d(), point3d(), point3d(), point3d(), point3d(), point3d()),
+                  locations(point3d(), point3d(), point3d(), point3d(), point3d(), point3d())]
 backward_entries = [0, 10]
 backward_table = MovementTable(backward_paths, 20, 20, backward_entries, 2)
 

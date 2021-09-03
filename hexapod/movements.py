@@ -39,5 +39,6 @@ k_standby = locations(point3d(p1_x, p1_y, p1_z),
                       point3d(p4_x, p4_y, p4_z),
                       point3d(p5_x, p5_y, p5_z),
                       point3d(p6_x, p6_y, p6_z),)
-zero = 0
-standby_table = MovementTable(k_standby, 1, 20, zero, 1)
+standby_entries = 0
+entries_count = 1  # Number of elements of variable standby_entries
+standby_table = MovementTable(k_standby, 1, 20, standby_entries, entries_count)

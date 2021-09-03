@@ -70,10 +70,10 @@ class Movement(object):
         if elapsed <= 0:
             elapsed = table.step_duration
 
-        if self.__remain_time <= 0:
+        if self.__remain_time <= 0:  # 小于零，表示该步完成，则开始下一步（步的index自增1）
             self.__index = (self.__index + 1) % table.length
 
-        if elapsed >= self.__remain_time:
+        if elapsed >= self.__remain_time:  # 仍剩最后一次迭代。过后，self.__position == table[self.__index]
             elapsed = self.__remain_time
 
         ratio = elapsed / self.__remain_time

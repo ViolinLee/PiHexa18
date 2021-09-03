@@ -12,6 +12,7 @@ hpi = pi/2
 定义六足机器人单腿类，包括基坐标转换和正逆运动学相关类函数。
 """
 
+
 class Leg(object):
     def __init__(self, leg_index):
         self.__leg_index = leg_index
@@ -116,5 +117,8 @@ class Leg(object):
 
         return angles
 
-    def __move(self, target_point):
-        return
+    def __move(self, target_point_local: point3d):
+        angles = self.__inverse_kinematics(target_point_local)
+        # Logging info
+        for i in range(3):
+            self.__servos[i].set_angle(angles[i])

@@ -260,6 +260,37 @@ def rotate_z_path_gen():  # path 为rotation矩阵时的还不清楚怎么使用
     return result, mode, step_duration, range(g_steps)
 
 
+def twist_path_gen():
+    g_steps = 20
+    raise_angle = 3
+    twist_x_angle = 20
+    twist_y_angle = 12
+    step_duration = 50
+    mode = "matrix"
+
+    assert (g_steps % 4) == 0
+
+    quarter = int(g_steps / 4)
+    step_x_angle = twist_x_angle / quarter
+    step_y_angle = twist_y_angle / quarter
+    m = get_rotate_x_matrix(raise_angle)
+
+    result = []
+    for i in range(quarter):
+        result.append(m * get_rotate_z_matrix(i*step_x_angle) * get_rotate_x_matrix(i*step_y_angle))
+
+    for i in range(quarter):
+        result.append(m * get_rotate_z_matrix((quarter-i)*step_x_angle) * get_rotate_x_matrix((quarter-i)*step_y_angle))
+
+    for i in range(quarter):
+        result.append(m * get_rotate_z_matrix(-i*step_x_angle) * get_rotate_x_matrix(i*step_y_angle))
+
+    for i in range(quarter):
+        result.append(m * get_rotate_z_matrix((-quarter+i)*step_x_angle) * get_rotate_x_matrix((quarter-i)*step_y_angle))
+
+    return result, mode, step_duration, [0, quarter*2]
+
+
 if __name__ == "__main__":
     result, mode, duration, _ = rotate_y_path_gen()
     for res in result:

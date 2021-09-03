@@ -11,6 +11,6 @@ leg_joint1_2joint2 = 28.0
 leg_joint2_2joint3 = 42.6
 leg_joint3_2tip = 89.07
 
-# movement parameters
-movement_interval = 5
-movement_switch_duration = 150
+# movement parameters (ms)
+movement_interval = 5  # 遥控延迟？步与步之间的间隙？
+movement_switch_duration = 150  # 切换模式的时间？每一步的时间？
