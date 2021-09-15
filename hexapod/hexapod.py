@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from servo import *
-from movement import *
-from leg import Leg
+from .servo import Servo
+from .movement import Movement, MovementMode
+from .leg import Leg
 
 
 class Hexapod(object):
