@@ -10,12 +10,12 @@ class Servo(object):
     def set_angle(self, angles):
         return
 
-    def init_PWM(self):
+    def init_pwm(self):
         if self.pwm_inited:
             return
 
     def init(self):
-        self.init_PWM()
+        self.init_pwm()
 
 
 if __name__ == '__main__':

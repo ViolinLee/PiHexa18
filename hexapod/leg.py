@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from base import *
-from config import *
-from math_utils import *
-from hexapod import *
-from servo import *
+from .base import *
+from .config import *
+from .math_utils import *
+from .hexapod import *
+from .servo import *
 from math import sin, cos, pi, atan2, sqrt, acos
 hpi = pi/2
 

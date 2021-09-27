@@ -12,7 +12,7 @@ class Hexapod(object):
         self.__mode = MovementMode.MOVEMENT_STANDBY
 
     def init(self, setting):
-        Servo.init_PWM()
+        self.init_pwm()
 
         # LFlash.begin()
         # calibrationLoad()

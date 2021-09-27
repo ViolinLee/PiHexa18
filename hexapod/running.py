@@ -1,8 +1,10 @@
 import os
 import argparse
-from hexapod import hexapod
 from time import time, sleep
+from .hexapod import Hexapod
+from .remote import Remote
 from .config import movement_interval, calibration_path
+
 
 
 react_delay = movement_interval * 0.001
@@ -43,10 +45,10 @@ if __name__ == '__main__':
 
     mode = 0
     # Remote controller instance
-    remote = remote()
+    remote = Remote()
 
     # Hexapod instance
-    pi_hexa = hexapod.Hexapod()
+    pi_hexa = Hexapod()
     pi_hexa.init()
 
     if mode == 0:
@@ -55,4 +57,4 @@ if __name__ == '__main__':
         while True:
             normal_loop()
     else:
-        animating_loop()
+        raise ValueError
