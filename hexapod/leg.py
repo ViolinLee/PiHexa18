@@ -49,7 +49,6 @@ class Leg(object):
             self.__local_conv = rotate225
             self.__world_conv = rotate135
 
-
     """coordinate system translation"""
     def translate2local(self, world_point: point3d):
         return self.__local_conv(world_point - self.__mount_position)
@@ -99,6 +98,7 @@ class Leg(object):
         return out_point
 
     def __inverse_kinematics(self, target_point: point3d):
+        """坐标原点在根部舵机关节处"""
         angles = [0.0] * 3
 
         x = target_point.x

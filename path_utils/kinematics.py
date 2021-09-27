@@ -5,6 +5,7 @@ pi = math.acos(-1)
 
 
 def ik(to):
+    """坐标原点在根部舵机安装处"""
     angles = []
     x = to[0] - leg_root2joint1
     y = to[1]
