@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from enum import Enum
-from .movement_table import *
-from .movements import *
-from .config import movement_switch_duration
+# from movement_table import *
+from movements import *
+from config import movement_switch_duration
 from random import randint
 
 """

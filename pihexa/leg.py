@@ -1,19 +1,18 @@
 # -*- coding: utf-8 -*-
 
-from .base import *
-from .config import *
-from .math_utils import *
-from .hexapod import *
-from .servo import *
+from config import *
+from math_utils import *
+from servo import *
 from math import sin, cos, pi, atan2, sqrt, acos
-hpi = pi/2
 
-"""
-定义六足机器人单腿类，包括基坐标转换和正逆运动学相关类函数。
-"""
+
+hpi = pi/2
 
 
 class Leg(object):
+    """
+    定义六足机器人单腿类，包括基坐标转换和正逆运动学相关类函数。
+    """
     def __init__(self, leg_index):
         self.__leg_index = leg_index
         self.__servos = [Servo(self.__leg_index, i) for i in range(3)]

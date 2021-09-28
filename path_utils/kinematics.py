@@ -1,5 +1,5 @@
 import math
-from hexapod.config import leg_root2joint1, leg_joint1_2joint2, leg_joint2_2joint3, leg_joint3_2tip
+from pihexa.config import leg_root2joint1, leg_joint1_2joint2, leg_joint2_2joint3, leg_joint3_2tip
 
 pi = math.acos(-1)
 

@@ -1,10 +1,9 @@
 import os
 import argparse
 from time import time, sleep
-from .hexapod import Hexapod
-from .remote import Remote
-from .config import movement_interval, calibration_path
-
+from pihexa import Hexapod
+from remote import Remote
+from config import movement_interval, calibration_path
 
 
 react_delay = movement_interval * 0.001

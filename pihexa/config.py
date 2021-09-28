@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from math import pi, cos, sin
 
 # mounting position
 leg_mount_left_right_x = 29.87  # position in x direction of the middle legs
@@ -10,6 +11,9 @@ leg_root2joint1 = 20.75
 leg_joint1_2joint2 = 28.0
 leg_joint2_2joint3 = 42.6
 leg_joint3_2tip = 89.07
+
+# path constant
+stanby_z = leg_joint3_2tip*cos(15*pi/180)-leg_joint2_2joint3*sin(30*pi/180)
 
 # movement parameters (ms)
 movement_interval = 5  # 遥控延迟？步与步之间的间隙？

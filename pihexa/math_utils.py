@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from base import *
+from pihexa.base import *
 
 """数学计算相关宏定义"""
 
