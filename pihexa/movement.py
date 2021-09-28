@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from enum import Enum
-# from movement_table import *
-from movements import *
-from config import movement_switch_duration
 from random import randint
+from movement_table import *
 
 """
 定义六足机器人移动相关函数。
@@ -84,10 +82,4 @@ class Movement(object):
         return self.__position
 
 
-class MovementTable(object):
-    def __init__(self, table, length, step_duration, entries, entries_count):
-        self.table = table
-        self.length = length
-        self.step_duration = step_duration
-        self.entries = entries
-        self.entries_count = entries_count
+

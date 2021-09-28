@@ -2,7 +2,7 @@ import matplotlib.animation as animation
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from pynput import keyboard
-from virtual_pihexa import VirtualPiHexa
+from hexapod import VirtualHexapod
 
 # Configuration
 WINDOW_SIZE = 150
@@ -12,7 +12,7 @@ ANIMATE_INTERVAL = 50
 fig = plt.figure()
 ax = Axes3D(fig)
 
-pihexa = VirtualPiHexa(ax=ax)
+pihexa = VirtualHexapod(ax=ax)
 
 
 def on_press_callback(key):

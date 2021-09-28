@@ -1,11 +1,22 @@
 # -*- coding: utf-8 -*-
 
-from movement import MovementTable
-from movements import *
+from movement_const import *
 
 """
 This file is generated, dont directly modify content...
 """
+
+
+class MovementTable(object):
+    def __init__(self, table, length, step_duration, entries, entries_count):
+        self.table = table
+        self.length = length
+        self.step_duration = step_duration
+        self.entries = entries
+        self.entries_count = entries_count
+
+
+standby_table = MovementTable(k_standby, 1, 20, standby_entries, entries_count)
 
 # 后退
 backward_paths = [locations(point3d(p1_x+0.0, p1_y+0.0, p1_z+0.0),
