@@ -36,21 +36,28 @@ class VirtualHexapod(object):
         self.ax = ax
         self.initial_height = initial_height
         self.__legs = [Leg(i) for i in range(6)]
-        self.body_vector = [(origin[0] + leg_mount_other_x, origin[1] + leg_mount_other_y, origin[2]),
-                            (origin[0] + leg_mount_left_right_x, origin[1], origin[2]),
-                            (origin[0] + leg_mount_other_x, origin[1] - leg_mount_other_y, origin[2]),
-                            (origin[0] - leg_mount_other_x, origin[1] - leg_mount_other_y, origin[2]),
-                            (origin[0] - leg_mount_left_right_x, origin[1], origin[2]),
-                            (origin[0] - leg_mount_other_x, origin[1] + leg_mount_other_y, origin[2]),
-                            (origin[0] + leg_mount_other_x, origin[1] + leg_mount_other_y, origin[2])]
-        self.leg_vector = []
+        self.body_vectors = [(origin[0] + leg_mount_other_x, origin[1] + leg_mount_other_y, origin[2]),
+                             (origin[0] + leg_mount_left_right_x, origin[1], origin[2]),
+                             (origin[0] + leg_mount_other_x, origin[1] - leg_mount_other_y, origin[2]),
+                             (origin[0] - leg_mount_other_x, origin[1] - leg_mount_other_y, origin[2]),
+                             (origin[0] - leg_mount_left_right_x, origin[1], origin[2]),
+                             (origin[0] - leg_mount_other_x, origin[1] + leg_mount_other_y, origin[2]),
+                             (origin[0] + leg_mount_other_x, origin[1] + leg_mount_other_y, origin[2])]
+        self.leg_vectors = []
 
     def draw_body(self, color='black'):
-        x_data = [vector[0] for vector in self.body_vector]
-        y_data = [vector[1] for vector in self.body_vector]
-        z_data = [vector[2] for vector in self.body_vector]
+        x_data = [vector[0] for vector in self.body_vectors]
+        y_data = [vector[1] for vector in self.body_vectors]
+        z_data = [vector[2] for vector in self.body_vectors]
         self.ax.plot(x_data, y_data, z_data, color=color)
 
     def draw_legs(self, color='blue'):
+        for i, leg in enumerate(self.__legs):
+            leg_vectors = []
 
-        return
+            x_data = [vector[0] for vector in leg_vectors]
+            y_data = [vector[1] for vector in leg_vectors]
+            z_data = [vector[2] for vector in leg_vectors]
+            self.ax.plot(x_data, y_data, z_data, color=color)
+
+

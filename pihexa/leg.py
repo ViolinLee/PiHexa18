@@ -3,6 +3,7 @@
 from config import *
 from math_utils import *
 from servo import *
+from movement_const import *
 from math import sin, cos, pi, atan2, sqrt, acos
 
 
@@ -16,8 +17,6 @@ class Leg(object):
     def __init__(self, leg_index):
         self.__leg_index = leg_index
         self.__servos = [Servo(self.__leg_index, i) for i in range(3)]
-        self.__tip_pos = point3d()
-        self.__tip_pos_local = point3d()
 
         """ 
         local_conv: 世界坐标系上的表达转换到本地坐标系上的表达
@@ -25,26 +24,38 @@ class Leg(object):
         """
         if self.__leg_index == 0:  # 45 or -315 degree:
             self.__mount_position = point3d(leg_mount_other_x, leg_mount_other_y, 0)
+            self.__tip_pos_local = point3d(p1_x, p1_y, p1_z)
+            self.__tip_pos = self.translate2world(self.__tip_pos_local)
             self.__local_conv = rotate315
             self.__world_conv = rotate45
         if self.__leg_index == 1:  # 0 degree:
             self.__mount_position = point3d(leg_mount_other_x, leg_mount_other_y, 0)
+            self.__tip_pos_local = point3d(p2_x, p2_y, p2_z)
+            self.__tip_pos = self.translate2world(self.__tip_pos_local)
             self.__local_conv = rotate0
             self.__world_conv = rotate0
         if self.__leg_index == 2:  # -45 or 315 degree:
             self.__mount_position = point3d(leg_mount_other_x, leg_mount_other_y, 0)
+            self.__tip_pos_local = point3d(p3_x, p3_y, p3_z)
+            self.__tip_pos = self.translate2world(self.__tip_pos_local)
             self.__local_conv = rotate45
             self.__world_conv = rotate315
         if self.__leg_index == 3:  # -135 or 225 degree:
             self.__mount_position = point3d(leg_mount_other_x, leg_mount_other_y, 0)
+            self.__tip_pos_local = point3d(p4_x, p4_y, p4_z)
+            self.__tip_pos = self.translate2world(self.__tip_pos_local)
             self.__local_conv = rotate135
             self.__world_conv = rotate225
         if self.__leg_index == 4:  # -180 or 180 degree:
             self.__mount_position = point3d(leg_mount_other_x, leg_mount_other_y, 0)
+            self.__tip_pos_local = point3d(p5_x, p5_y, p5_z)
+            self.__tip_pos = self.translate2world(self.__tip_pos_local)
             self.__local_conv = rotate180
             self.__world_conv = rotate180
         if self.__leg_index == 5:  # -225 or 135 degree:
             self.__mount_position = point3d(leg_mount_other_x, leg_mount_other_y, 0)
+            self.__tip_pos_local = point3d(p6_x, p6_y, p6_z)
+            self.__tip_pos = self.translate2world(self.__tip_pos_local)
             self.__local_conv = rotate225
             self.__world_conv = rotate135
 
