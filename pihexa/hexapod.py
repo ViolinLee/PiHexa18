@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 
-# from servo import Servo
 from movement import Movement, MovementMode
-from leg import Leg
+from leg import Leg, VirtualLeg
 from config import *
+from base import point3d
 
 
 class Hexapod(object):
     def __init__(self):
         self.__legs = [Leg(i) for i in range(6)]
-        self.__movement = Movement(MovementMode.MOVEMENT_STANDBY)
+        self.__movement = Movement(MovementMode.MOVEMENT_STANDBY, False)
         self.__mode = MovementMode.MOVEMENT_STANDBY
 
     def init(self, setting):
@@ -31,33 +31,31 @@ class Hexapod(object):
             self.__legs[i].move_tip(location.get(i))
 
 
-class VirtualHexapod(object):
+class VirtualHexapod(Hexapod):
     def __init__(self, ax, origin=(0, 0, 0), initial_height=stanby_z):
+        super(VirtualHexapod, self).__init__()
+        self.__legs = [VirtualLeg(i) for i in range(6)]
         self.ax = ax
         self.initial_height = initial_height
-        self.__legs = [Leg(i) for i in range(6)]
-        self.body_vectors = [(origin[0] + leg_mount_other_x, origin[1] + leg_mount_other_y, origin[2]),
-                             (origin[0] + leg_mount_left_right_x, origin[1], origin[2]),
-                             (origin[0] + leg_mount_other_x, origin[1] - leg_mount_other_y, origin[2]),
-                             (origin[0] - leg_mount_other_x, origin[1] - leg_mount_other_y, origin[2]),
-                             (origin[0] - leg_mount_left_right_x, origin[1], origin[2]),
-                             (origin[0] - leg_mount_other_x, origin[1] + leg_mount_other_y, origin[2]),
-                             (origin[0] + leg_mount_other_x, origin[1] + leg_mount_other_y, origin[2])]
-        self.leg_vectors = []
+        self.body_vectors = [point3d(origin[0] + leg_mount_other_x, origin[1] + leg_mount_other_y, origin[2]),
+                             point3d(origin[0] + leg_mount_left_right_x, origin[1], origin[2]),
+                             point3d(origin[0] + leg_mount_other_x, origin[1] - leg_mount_other_y, origin[2]),
+                             point3d(origin[0] - leg_mount_other_x, origin[1] - leg_mount_other_y, origin[2]),
+                             point3d(origin[0] - leg_mount_left_right_x, origin[1], origin[2]),
+                             point3d(origin[0] - leg_mount_other_x, origin[1] + leg_mount_other_y, origin[2]),
+                             point3d(origin[0] + leg_mount_other_x, origin[1] + leg_mount_other_y, origin[2])]
 
     def draw_body(self, color='black'):
-        x_data = [vector[0] for vector in self.body_vectors]
-        y_data = [vector[1] for vector in self.body_vectors]
-        z_data = [vector[2] for vector in self.body_vectors]
+        x_data = [point.x for point in self.body_vectors]
+        y_data = [point.y for point in self.body_vectors]
+        z_data = [point.z for point in self.body_vectors]
         self.ax.plot(x_data, y_data, z_data, color=color)
 
     def draw_legs(self, color='blue'):
         for i, leg in enumerate(self.__legs):
-            leg_vectors = []
-
-            x_data = [vector[0] for vector in leg_vectors]
-            y_data = [vector[1] for vector in leg_vectors]
-            z_data = [vector[2] for vector in leg_vectors]
+            x_data = [point.x for point in leg.leg_vectors]
+            y_data = [point.y for point in leg.leg_vectors]
+            z_data = [point.z for point in leg.leg_vectors]
             self.ax.plot(x_data, y_data, z_data, color=color)
 
 

@@ -36,7 +36,7 @@ def rotate135(src: point3d):
 def rotate180(src: point3d):
     dest = point3d()
     dest.x = -src.x
-    dest.y = -src.x
+    dest.y = -src.y
     dest.z = src.z
     return dest
 

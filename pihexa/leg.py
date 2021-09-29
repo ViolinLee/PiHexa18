@@ -24,40 +24,42 @@ class Leg(object):
         """
         if self.__leg_index == 0:  # 45 or -315 degree:
             self.__mount_position = point3d(leg_mount_other_x, leg_mount_other_y, 0)
-            self.__tip_pos_local = point3d(p1_x, p1_y, p1_z)
-            self.__tip_pos = self.translate2world(self.__tip_pos_local)
             self.__local_conv = rotate315
             self.__world_conv = rotate45
-        if self.__leg_index == 1:  # 0 degree:
-            self.__mount_position = point3d(leg_mount_other_x, leg_mount_other_y, 0)
-            self.__tip_pos_local = point3d(p2_x, p2_y, p2_z)
+            self.__tip_pos_local = point3d(p1_x, p1_y, p1_z)
             self.__tip_pos = self.translate2world(self.__tip_pos_local)
+        elif self.__leg_index == 1:  # 0 degree:
+            self.__mount_position = point3d(leg_mount_left_right_x, 0, 0)
             self.__local_conv = rotate0
             self.__world_conv = rotate0
-        if self.__leg_index == 2:  # -45 or 315 degree:
-            self.__mount_position = point3d(leg_mount_other_x, leg_mount_other_y, 0)
-            self.__tip_pos_local = point3d(p3_x, p3_y, p3_z)
+            self.__tip_pos_local = point3d(p2_x, p2_y, p2_z)
             self.__tip_pos = self.translate2world(self.__tip_pos_local)
+        elif self.__leg_index == 2:  # -45 or 315 degree:
+            self.__mount_position = point3d(leg_mount_other_x, -leg_mount_other_y, 0)
             self.__local_conv = rotate45
             self.__world_conv = rotate315
-        if self.__leg_index == 3:  # -135 or 225 degree:
-            self.__mount_position = point3d(leg_mount_other_x, leg_mount_other_y, 0)
-            self.__tip_pos_local = point3d(p4_x, p4_y, p4_z)
+            self.__tip_pos_local = point3d(p3_x, p3_y, p3_z)
             self.__tip_pos = self.translate2world(self.__tip_pos_local)
+        elif self.__leg_index == 3:  # -135 or 225 degree:
+            self.__mount_position = point3d(-leg_mount_other_x, -leg_mount_other_y, 0)
             self.__local_conv = rotate135
             self.__world_conv = rotate225
-        if self.__leg_index == 4:  # -180 or 180 degree:
-            self.__mount_position = point3d(leg_mount_other_x, leg_mount_other_y, 0)
-            self.__tip_pos_local = point3d(p5_x, p5_y, p5_z)
+            self.__tip_pos_local = point3d(p4_x, p4_y, p4_z)
             self.__tip_pos = self.translate2world(self.__tip_pos_local)
+        elif self.__leg_index == 4:  # -180 or 180 degree:
+            self.__mount_position = point3d(-leg_mount_left_right_x, 0, 0)
             self.__local_conv = rotate180
             self.__world_conv = rotate180
-        if self.__leg_index == 5:  # -225 or 135 degree:
-            self.__mount_position = point3d(leg_mount_other_x, leg_mount_other_y, 0)
-            self.__tip_pos_local = point3d(p6_x, p6_y, p6_z)
+            self.__tip_pos_local = point3d(p5_x, p5_y, p5_z)
             self.__tip_pos = self.translate2world(self.__tip_pos_local)
+        elif self.__leg_index == 5:  # -225 or 135 degree:
+            self.__mount_position = point3d(-leg_mount_other_x, leg_mount_other_y, 0)
             self.__local_conv = rotate225
             self.__world_conv = rotate135
+            self.__tip_pos_local = point3d(p6_x, p6_y, p6_z)
+            self.__tip_pos = self.translate2world(self.__tip_pos_local)
+        else:
+            raise ValueError
 
     """coordinate system translation"""
     def translate2local(self, world_point: point3d):
@@ -108,10 +110,10 @@ class Leg(object):
         return out_point
 
     def __inverse_kinematics(self, target_point: point3d):
-        """坐标原点在根部舵机关节处"""
+        """坐标原点在根部舵机安装处"""
         angles = [0.0] * 3
 
-        x = target_point.x
+        x = target_point.x - leg_root2joint1
         y = target_point.y
         angles[0] = atan2(y, x) * 180 / pi
 
@@ -132,3 +134,34 @@ class Leg(object):
         # Logging info
         for i in range(3):
             self.__servos[i].set_angle(angles[i])
+
+
+class VirtualLeg(Leg):
+    def __init__(self, leg_index):
+        super(VirtualLeg, self).__init__(leg_index)
+        self.joint_angles = [0, 30, -15]
+        self.leg_vectors_local = self.__forward_kinematics(self.joint_angles)
+        self.leg_vectors = [self.translate2world(point) for point in self.leg_vectors_local]
+
+    def __forward_kinematics(self, angles):
+        """leg_vectors: point3d list with length of 5"""
+        radians = [angle * pi / 180 for angle in angles]
+        joint1_pos = point3d(leg_root2joint1, 0, 0)
+        joint2_pos = joint1_pos + point3d(leg_joint1_2joint2 * cos(radians[0]), leg_joint1_2joint2 * sin(radians[0]), 0)
+        joint3_pos = joint2_pos + point3d(leg_joint2_2joint3 * cos(radians[1]) * cos(radians[0]),
+                                          leg_joint2_2joint3 * cos(radians[1]) * sin(radians[0]),
+                                          leg_joint2_2joint3 * sin(radians[1]))
+        joint4_pos = joint3_pos + point3d(cos(radians[1] + radians[2] - hpi) * leg_joint3_2tip * cos(radians[0]),
+                                          cos(radians[1] + radians[2] - hpi) * leg_joint3_2tip * sin(radians[0]),
+                                          sin(radians[1] + radians[2] - hpi) * leg_joint3_2tip)
+
+        leg_vectors_local = [point3d(0, 0, 0), joint1_pos, joint2_pos, joint3_pos, joint4_pos]
+
+        return leg_vectors_local
+
+    def __move(self, target_point_local: point3d):
+        angles = self.__inverse_kinematics(target_point_local)
+        self.joint_angles = angles
+        # To simulate movement on matplotlib figure
+        self.leg_vectors_local = self.__forward_kinematics(angles)
+        self.leg_vectors = [self.translate2world(point) for point in self.leg_vectors_local]

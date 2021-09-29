@@ -5,7 +5,7 @@ from pynput import keyboard
 from hexapod import VirtualHexapod
 
 # Configuration
-WINDOW_SIZE = 150
+WINDOW_SIZE = 400
 ANIMATE_INTERVAL = 50
 
 # Setting up 3D matplotlib figure
