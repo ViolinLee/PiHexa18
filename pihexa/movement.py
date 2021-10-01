@@ -46,12 +46,13 @@ k_table = [standby_table,
 class Movement(object):
     def __init__(self, mode, transiting: bool):
         self.__mode = mode
-        self.__position = k_standby
+        self.__position = locations()  # k_standby
         self.__index = 0  # index in mode position table
         self.__transiting = transiting  # if still in transiting to new mode
         self.__remain_time = 0
 
     def set_mode(self, new_mode):
+        print(standby_table.entries)
         if not k_table[new_mode].entries:
             # log_info
             return
@@ -60,23 +61,27 @@ class Movement(object):
 
         table = k_table[self.__mode]
 
-        self.__index = table.entries[randint() % table.entries_count]  # count==1:__index=0/1; count==2: __index=0/1/2
-        self.__remain_time = movement_switch_duration if movement_switch_duration > table.step_duration else table.step_duration
+        self.__index = table.entries[randint(0, 255) % table.entries_count]  # count==2: __index = 0 or 1
+        self.__remain_time = movement_switch_duration if movement_switch_duration > table.step_duration else table.step_duration  # maximum value
+
+        print("movement.mode", self.__mode)
 
     def next(self, elapsed):
         table = k_table[self.__mode]
 
         if elapsed <= 0:
-            elapsed = table.step_duration
+            elapsed = table.step_duration  # 使elapsed的值合理
 
         if self.__remain_time <= 0:  # 小于零，表示该步完成，则开始下一步（步的index自增1）
-            self.__index = (self.__index + 1) % table.length
+            self.__index = (self.__index + 1) % table.length  # index会循环取[0, table_length)的值
+            self.__remain_time = table.step_duration
 
         if elapsed >= self.__remain_time:  # 仍剩最后一次迭代。过后，self.__position == table[self.__index]
             elapsed = self.__remain_time
 
+        # 对每一步再细分（remain_time是前一步态途径点与后一步态途径点的间隔；step_duration是前一细分步与后一细分步的间隔）
         ratio = elapsed / self.__remain_time
-        self.__position += (table[self.__index] - self.__position) * ratio
+        self.__position += (table.table[self.__index] - self.__position) * ratio
         self.__remain_time -= elapsed
 
         return self.__position

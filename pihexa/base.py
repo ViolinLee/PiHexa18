@@ -11,6 +11,10 @@ class point3d(object):
         self.y = y
         self.z = z
 
+    @classmethod
+    def from_tuple(cls, point_tuple):
+        return cls(point_tuple[0], point_tuple[1], point_tuple[2])
+
     def __sub__(self, other):
         return point3d(self.x - other.x, self.y - other.y, self.z - other.z)
 
@@ -25,8 +29,13 @@ class point3d(object):
 
 
 class locations(object):
-    def __init__(self, fore_right, right, hind_right, hind_left, left, fore_left):
+    def __init__(self, fore_right=point3d(), right=point3d(), hind_right=point3d(), hind_left=point3d(), left=point3d(), fore_left=point3d()):
         self.__points = [fore_right, right, hind_right, hind_left, left, fore_left]
+
+    @classmethod
+    def from_list(cls, points_list):
+        point3d_list = [point3d.from_tuple(point_tuple) for point_tuple in points_list]
+        return cls(point3d_list[0], point3d_list[1], point3d_list[2], point3d_list[3], point3d_list[4], point3d_list[5])
 
     def get(self, index):
         return self.__points[index]
@@ -55,8 +64,12 @@ class locations(object):
                          self.__points[4] * rhs,
                          self.__points[5] * rhs)
 
+    def __str__(self):
+        return str([(point.x, point.y, point.z) for point in self.__points])
+
 
 if __name__ == '__main__':
+    """
     point_a = point3d(1, 2, 3)
     point_b = point3d(4, 5, 6)
     point_c = point_a - point_b
@@ -77,4 +90,13 @@ if __name__ == '__main__':
     locations_c = locations_a - locations_b
     locations_c += locations_c
     locations_c = locations_c * 3
-    print(locations_c.get(0).x, locations_c.get(0).y, locations_c.get(0).z)
+    print(locations_c.get(0).x, locations_c.get(0).y, locations_c.get(0).z)"""
+
+    loc = locations()
+    print(loc.get(0).x, loc.get(0).y, loc.get(0).z)
+
+    p = point3d.from_tuple((1, 2, 3))
+    print(p.x, p.y, p.z)
+
+    loc = locations.from_list([(1, 2, 3), (4, 5, 6), (7, 8, 9), (11, 22, 33), (44, 55, 66), (77, 88, 99)])
+    print(loc.get(5).y)

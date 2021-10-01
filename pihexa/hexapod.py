@@ -9,30 +9,31 @@ from base import point3d
 class Hexapod(object):
     def __init__(self):
         self.__legs = [Leg(i) for i in range(6)]
-        self.__movement = Movement(MovementMode.MOVEMENT_STANDBY, False)
-        self.__mode = MovementMode.MOVEMENT_STANDBY
+        self._movement = Movement(MovementMode.MOVEMENT_STANDBY.value, False)
+        self._mode = MovementMode.MOVEMENT_STANDBY.value
 
     def init(self, setting):
-        self.init_pwm()
+        # self.init_pwm()
 
         # LFlash.begin()
         # calibrationLoad()
 
         if not setting:
-            self.process_movement(MovementMode.MOVEMENT_STANDBY)
+            self.process_movement(MovementMode.MOVEMENT_STANDBY.value)
+        print("PiHexa init done.")
 
     def process_movement(self, mode, elapsed=0):  # 重要函数，与步态执行有关
-        if self.__mode != mode:
-            self.__mode = mode
-            self.__movement.set_mode(self.__mode)
+        if self._mode != mode:
+            self._mode = mode
+            self._movement.set_mode(self._mode)
 
-        location = self.__movement.next(elapsed=elapsed)
+        location = self._movement.next(elapsed=elapsed)
         for i in range(6):
             self.__legs[i].move_tip(location.get(i))
 
 
 class VirtualHexapod(Hexapod):
-    def __init__(self, ax, origin=(0, 0, 0), initial_height=stanby_z):
+    def __init__(self, ax, origin=(0, 0, 0), initial_height=standby_z):
         super(VirtualHexapod, self).__init__()
         self.__legs = [VirtualLeg(i) for i in range(6)]
         self.ax = ax
@@ -57,5 +58,15 @@ class VirtualHexapod(Hexapod):
             y_data = [point.y for point in leg.leg_vectors]
             z_data = [point.z for point in leg.leg_vectors]
             self.ax.plot(x_data, y_data, z_data, color=color)
+
+    def process_movement(self, mode, elapsed=0):  # 重要函数，与步态执行有关
+        if self._mode != mode:
+            self._mode = mode
+            print("mode:", mode, "self.mode:", self._mode)
+            self._movement.set_mode(self._mode)
+
+        location = self._movement.next(elapsed=elapsed)
+        for i in range(6):
+            self.__legs[i].move_tip(location.get(i))
 
 

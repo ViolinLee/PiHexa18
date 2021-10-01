@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from movement_const import *
+from path_utils.movement_paths import *
+from config import k_standby, standby_entries, standby_entries_count
 
 """
 This file is generated, dont directly modify content...
@@ -9,93 +10,24 @@ This file is generated, dont directly modify content...
 
 class MovementTable(object):
     def __init__(self, table, length, step_duration, entries, entries_count):
-        self.table = table
+        self.table = [locations.from_list(path_point) for path_point in table]
         self.length = length
         self.step_duration = step_duration
         self.entries = entries
         self.entries_count = entries_count
 
 
-standby_table = MovementTable(k_standby, 1, 20, standby_entries, entries_count)
-
-# 后退
-backward_paths = [locations(point3d(p1_x+0.0, p1_y+0.0, p1_z+0.0),
-                            point3d(p2_x+0.0, p2_y+0.0, p2_z+0.0),
-                            point3d(p3_x+0.0, p3_y+0.0, p3_z+0.0),
-                            point3d(p4_x+0.0, p4_y+0.0, p4_z+0.0),
-                            point3d(p5_x+0.0, p5_y+0.0, p5_z+0.0),
-                            point3d(p6_x+0.0, p6_y+0.0, p6_z+0.0)),
-                  locations(point3d(p1_x+0.0, p1_y+0.0, p1_z+0.0),
-                            point3d(p2_x+0.0, p2_y+0.0, p2_z+0.0),
-                            point3d(p3_x+0.0, p3_y+0.0, p3_z+0.0),
-                            point3d(p4_x+0.0, p4_y+0.0, p4_z+0.0),
-                            point3d(p5_x+0.0, p5_y+0.0, p5_z+0.0),
-                            point3d(p6_x+0.0, p6_y+0.0, p6_z+0.0))]
-backward_entries = [0, 10]
-backward_table = MovementTable(backward_paths, 20, 20, backward_entries, 2)
-
-# 攀登
-climb_paths = [locations(point3d(), point3d(), point3d(), point3d(), point3d(), point3d()),
-               locations(point3d(), point3d(), point3d(), point3d(), point3d(), point3d())]
-climb_entries = [0, 10]
-climb_table = MovementTable(climb_paths, 20, 30, climb_entries, 2)
-
-# 前进
-forward_paths = [locations(point3d(), point3d(), point3d(), point3d(), point3d(), point3d()),
-                 locations(point3d(), point3d(), point3d(), point3d(), point3d(), point3d())]
-forward_entries = [0, 10]
-forward_table = MovementTable(forward_paths, 20, 20, forward_entries, 2)
-
-# 快速前进
-forward_fast_paths = [locations(point3d(), point3d(), point3d(), point3d(), point3d(), point3d()),
-                      locations(point3d(), point3d(), point3d(), point3d(), point3d(), point3d())]
-forward_fast_entries = [0, 10]
+standby_table = MovementTable([k_standby], 1, 20, standby_entries, standby_entries_count)
+backward_table = MovementTable(backward_paths, backward_length, backward_duration, backward_entries, len(backward_entries))
+climb_table = MovementTable(climb_paths, 20, 30, climb_entries, len(climb_entries))
+forward_table = MovementTable(forward_paths, 20, 20, forward_entries, len(forward_entries))
 forward_fast_table = MovementTable(forward_fast_paths, 20, 20, forward_fast_entries, 2)
-
-# 绕 X 轴旋转
-rotate_x_paths = [locations(point3d(), point3d(), point3d(), point3d(), point3d(), point3d()),
-                  locations(point3d(), point3d(), point3d(), point3d(), point3d(), point3d())]
-rotate_x_entries = [0, 10]
 rotate_x_table = MovementTable(rotate_x_paths, 20, 20, rotate_x_entries, 2)
-
-# 绕 Y 轴旋转
-rotate_y_paths = [locations(point3d(), point3d(), point3d(), point3d(), point3d(), point3d()),
-                  locations(point3d(), point3d(), point3d(), point3d(), point3d(), point3d())]
-rotate_y_entries = [0, 10]
 rotate_y_table = MovementTable(rotate_y_paths, 20, 20, rotate_y_entries, 2)
-
-# 绕 Z 轴旋转
-rotate_zy_paths = [locations(point3d(), point3d(), point3d(), point3d(), point3d(), point3d()),
-                   locations(point3d(), point3d(), point3d(), point3d(), point3d(), point3d())]
-rotate_z_entries = [0, 10]
 rotate_z_table = MovementTable(rotate_y_paths, 20, 20, rotate_z_entries, 2)
-
-# 左平移
-shift_left_paths = [locations(point3d(), point3d(), point3d(), point3d(), point3d(), point3d()),
-                    locations(point3d(), point3d(), point3d(), point3d(), point3d(), point3d())]
-shift_left_entries = [0, 10]
 shift_left_table = MovementTable(shift_left_paths, 20, 20, shift_left_entries, 2)
-
-# 右平移
-shift_right_paths = [locations(point3d(), point3d(), point3d(), point3d(), point3d(), point3d()),
-                     locations(point3d(), point3d(), point3d(), point3d(), point3d(), point3d())]
-shift_right_entries = [0, 10]
 shift_right_table = MovementTable(shift_right_paths, 20, 20, shift_right_entries, 2)
-
-# 左转弯
-turn_left_paths = [locations(point3d(), point3d(), point3d(), point3d(), point3d(), point3d()),
-                   locations(point3d(), point3d(), point3d(), point3d(), point3d(), point3d())]
-turn_left_entries = [0, 10]
 turn_left_table = MovementTable(turn_left_paths, 20, 20, turn_left_entries, 2)
-
-# 右转弯
-turn_right_paths = [locations(point3d(), point3d(), point3d(), point3d(), point3d(), point3d()),
-                    locations(point3d(), point3d(), point3d(), point3d(), point3d(), point3d())]
-turn_right_entries = [0, 10]
 turn_right_table = MovementTable(turn_right_paths, 20, 20, turn_right_entries, 2)
-
-# 扭动
-twist_paths = [locations(point3d(), point3d(), point3d(), point3d(), point3d(), point3d()),
-               locations(point3d(), point3d(), point3d(), point3d(), point3d(), point3d())]
-twist_entries = [0, 10]
 twist_table = MovementTable(twist_paths, 20, 20, twist_entries, 2)
+

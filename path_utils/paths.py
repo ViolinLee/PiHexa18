@@ -254,7 +254,7 @@ def rotate_z_path_gen():  # path 为rotation矩阵时的还不清楚怎么使用
         x = xy_radius * cos(i*step_angle)  # [1, 0, -1, 0, 1]
         y = xy_radius * sin(i*step_angle)  # [0, 1, 0, -1, 0]
 
-        m = get_rotate_y_matrix(atan2(x, z_lift) * 180 / pi) * get_rotate_x_matrix(atan2(y, z_lift) * 180 / pi)
+        m = get_rotate_y_matrix(atan2(x, z_lift) * 180 / pi) @ get_rotate_x_matrix(atan2(y, z_lift) * 180 / pi)
         result.append(m)
 
     return result, mode, step_duration, range(g_steps)
@@ -277,28 +277,40 @@ def twist_path_gen():
 
     result = []
     for i in range(quarter):
-        result.append(m * get_rotate_z_matrix(i*step_x_angle) * get_rotate_x_matrix(i*step_y_angle))
+        result.append(m @ get_rotate_z_matrix(i*step_x_angle) @ get_rotate_x_matrix(i*step_y_angle))
 
     for i in range(quarter):
-        result.append(m * get_rotate_z_matrix((quarter-i)*step_x_angle) * get_rotate_x_matrix((quarter-i)*step_y_angle))
+        result.append(m @ get_rotate_z_matrix((quarter-i)*step_x_angle) @ get_rotate_x_matrix((quarter-i)*step_y_angle))
 
     for i in range(quarter):
-        result.append(m * get_rotate_z_matrix(-i*step_x_angle) * get_rotate_x_matrix(i*step_y_angle))
+        result.append(m @ get_rotate_z_matrix(-i*step_x_angle) @ get_rotate_x_matrix(i*step_y_angle))
 
     for i in range(quarter):
-        result.append(m * get_rotate_z_matrix((-quarter+i)*step_x_angle) * get_rotate_x_matrix((quarter-i)*step_y_angle))
+        result.append(m @ get_rotate_z_matrix((-quarter+i)*step_x_angle) @ get_rotate_x_matrix((quarter-i)*step_y_angle))
 
     return result, mode, step_duration, [0, quarter*2]
 
 
+paths_generators = {'forward': forward_path_gen,
+                    'forward_fast': forward_fast_path_gen,
+                    'backward': backward_path_gen,
+                    'turn_left': turn_left_path_gen,
+                    'turn_right': turn_right_path_gen,
+                    'shift_left': shift_left_path_gen,
+                    'shift_right': shift_right_path_gen,
+                    'climb': climb_path_gen,
+                    'rotate_x': rotate_x_path_gen,
+                    'rotate_y': rotate_y_path_gen,
+                    'rotate_z': rotate_z_path_gen,
+                    'twist': twist_path_gen}
+
+
 if __name__ == "__main__":
     result, mode, duration, _ = rotate_y_path_gen()
-    for res in result:
-        print(res)
+    resultx, modex, durationx, _ = rotate_x_path_gen()
 
-    print("============== Rotate Z Test ==============")
-    result, mode, duration, _ = rotate_z_path_gen()
-    for res in result:
-        print(res)
+    for i, res in enumerate(result):
+        print(result[i], '\n', resultx[i])
+        print("\n")
 
 

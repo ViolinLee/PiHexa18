@@ -4,6 +4,9 @@ from mpl_toolkits.mplot3d import Axes3D
 from pynput import keyboard
 from hexapod import VirtualHexapod
 
+# Initialize: 0-normal mode   1-setting mode (for servo calibration)
+setup_mode = 0
+
 # Configuration
 WINDOW_SIZE = 400
 ANIMATE_INTERVAL = 50
@@ -12,18 +15,34 @@ ANIMATE_INTERVAL = 50
 fig = plt.figure()
 ax = Axes3D(fig)
 
+# Global variable
+mode = 0  # action mode
+x = y = z = roll = pitch = yaw = 0
+
+# Hexapod instance
 pihexa = VirtualHexapod(ax=ax)
+pihexa.init(setting=(setup_mode == 1))
 
 
 def on_press_callback(key):
-    global x, y, z, roll, pitch, yaw
+    global mode, x, y, z, roll, pitch, yaw
 
     if key == keyboard.Key.esc:
         return False
     try:
         k = key.char
     except:
-        key = key.name
+        k = key.name
+    print(type(k), k)
+
+    if k in ['z']:
+        mode = 10
+    elif k in ['x']:
+        mode = 11
+    elif k in ['c']:
+        mode = 12
+    else:
+        mode = int(k)
 
     return
 
@@ -42,9 +61,10 @@ def setup():
 
 
 def animate(i):
-    global x, y, z, roll, pitch, yaw
+    global mode
     setup()
 
+    pihexa.process_movement(mode)
     pihexa.draw_body()
     pihexa.draw_legs()
 
