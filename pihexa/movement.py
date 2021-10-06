@@ -53,6 +53,7 @@ class Movement(object):
 
     def set_mode(self, new_mode):
         print(standby_table.entries)
+
         if not k_table[new_mode].entries:
             # log_info
             return

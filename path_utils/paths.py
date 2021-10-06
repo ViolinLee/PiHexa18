@@ -241,7 +241,44 @@ def rotate_y_path_gen():
     return result, mode, step_duration, (0, quarter*2)
 
 
-def rotate_z_path_gen():  # path 为rotation矩阵时的还不清楚怎么使用
+def rotate_z_path_gen():
+    """
+    g_steps = 20
+    swing_angle = 15
+    z_radius = 15
+    step_duration = 50
+    mode = "matrix"
+
+    assert (g_steps % 4) == 0
+    quarter = int(g_steps / 4)
+
+    result = []
+    step_angle = swing_angle / quarter
+    step_offset = z_radius / quarter
+
+    for i in range(quarter):
+        m = get_rotate_z_matrix(swing_angle - i * step_angle)  # [swing_angle, 0]
+        #m[0, 3] = -i * step_offset
+        result.append(m)
+
+    for i in range(quarter):
+        m = get_rotate_z_matrix(-i * step_angle)  # [0, -swing_angle]
+        #m[0, 3] = -z_radius + i * step_offset
+        result.append(m)
+
+    for i in range(quarter):
+        m = get_rotate_z_matrix(i * step_angle - swing_angle)  # [-swing_angle, 0]
+        #m[0, 3] = i * step_offset
+        result.append(m)
+
+    for i in range(quarter):
+        m = get_rotate_z_matrix(i * step_angle)  # [0, swing_angle]
+        #m[0, 3] = z_radius - i * step_offset
+        result.append(m)
+
+    return result, mode, step_duration, (0, quarter * 2)
+    """
+
     g_steps = 20
     z_lift = 4.5
     xy_radius = 1
@@ -258,6 +295,8 @@ def rotate_z_path_gen():  # path 为rotation矩阵时的还不清楚怎么使用
         result.append(m)
 
     return result, mode, step_duration, range(g_steps)
+
+
 
 
 def twist_path_gen():
