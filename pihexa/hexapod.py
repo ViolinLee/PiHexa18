@@ -12,10 +12,9 @@ class Hexapod(object):
         self.__legs = [Leg(i) for i in range(6)]
         self._movement = Movement(MovementMode.MOVEMENT_STANDBY.value, False)
         self._mode = MovementMode.MOVEMENT_STANDBY.value
+        self.servo = None
 
     def init(self, setting):
-        pwm.init()
-
         # LFlash.begin()
         # calibrationLoad()
 
