@@ -4,6 +4,7 @@ from movement import Movement, MovementMode
 from leg import Leg, VirtualLeg
 from config import *
 from base import point3d
+from servo import Servo
 
 
 class Hexapod(object):
@@ -13,7 +14,7 @@ class Hexapod(object):
         self._mode = MovementMode.MOVEMENT_STANDBY.value
 
     def init(self, setting):
-        # self.init_pwm()
+        pwm.init()
 
         # LFlash.begin()
         # calibrationLoad()

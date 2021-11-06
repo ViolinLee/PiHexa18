@@ -1,7 +1,7 @@
 import os
 import argparse
 from time import time, sleep
-from pihexa import Hexapod
+from hexapod import Hexapod
 from remote import Remote
 from config import movement_interval, calibration_path
 
@@ -10,39 +10,35 @@ react_delay = movement_interval * 0.001
 
 
 def normal_loop():
-    if not remote.connected():
-        sleep(1 - react_delay)
+    while True:
+        if not remote.connected():
+            sleep(1 - react_delay)
 
-    t0 = time()
-    remote.process()
-    mode = remote.mode
+        t0 = time()
+        remote.process()
+        mode = remote.mode
 
-    pi_hexa.process_movement(mode, react_delay)
-    time_spent = time() - t0
-    if time_spent < react_delay:
-        sleep(react_delay - time_spent)
-    else:
-        print(time_spent)
+        pi_hexa.process_movement(mode, react_delay)
+        time_spent = time() - t0
+        if time_spent < react_delay:
+            sleep(react_delay - time_spent)
+        else:
+            print(time_spent)
 
 
 def calibrating_loop(path):
     # json file
     with open(path, 'w') as f:
-
         pass
-    return
-
-
-def anamating_loop():
     return
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--mode', type=str, default=2, help="Action mode: 0-calibration 1-normal running 2-animation")
-    parser.parse_args()
+    parser.add_argument('--mode', type=str, default=2, help="Action mode: 0-calibration 1-normal running")
+    args = parser.parse_args()
+    mode = args.mode
 
-    mode = 0
     # Remote controller instance
     remote = Remote()
 
@@ -53,7 +49,6 @@ if __name__ == '__main__':
     if mode == 0:
         calibrating_loop(calibration_path)
     elif mode == 1:
-        while True:
-            normal_loop()
+        normal_loop()
     else:
         raise ValueError

@@ -1,21 +1,15 @@
 # -*- coding: utf-8 -*-
 
+from pca9685 import PCA9685
+
 
 class Servo(object):
-    def __init__(self, leg_index, part_index):
-        self.leg_index = leg_index
-        self.part_index = part_index
-        self.pwm_inited = False
+    def __init__(self, left_address=0x41, right_address=0x40):
+        self.pwm_left = PCA9685(left_address)
+        self.pwm_right = PCA9685(right_address)
 
-    def set_angle(self, angles):
+    def set_angle(self, leg_index, part_index, angles):
         return
-
-    def init_pwm(self):
-        if self.pwm_inited:
-            return
-
-    def init(self):
-        self.init_pwm()
 
 
 if __name__ == '__main__':
