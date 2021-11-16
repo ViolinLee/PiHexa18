@@ -5,7 +5,7 @@ from numpy import interp
 
 
 class Servo(object):
-    def __init__(self, offset_array=None, left_address=0x41, right_address=0x40, pulse_min=544, pulse_max=2400):
+    def __init__(self, offset_array=None, left_address=0x40, right_address=0x41, pulse_min=544, pulse_max=2400):
         if offset_array is None:
             offset_array = [0] * 18
         self.pwm_left = PCA9685(left_address)
@@ -23,13 +23,13 @@ class Servo(object):
         # switch left, right pwm
         if leg_index == 0:
             pwm_index = 5 + part_index
-            pwm = self.pwm_left
+            pwm = self.pwm_right
         elif leg_index == 1:
             pwm_index = 2 + part_index
-            pwm = self.pwm_left
+            pwm = self.pwm_right
         elif leg_index == 2:
             pwm_index = 8 + part_index
-            pwm = self.pwm_left
+            pwm = self.pwm_right
         elif leg_index == 3:
             pwm_index = 8 + part_index
             pwm = self.pwm_left
@@ -50,4 +50,11 @@ class Servo(object):
 
 
 if __name__ == '__main__':
-    servo1 = Servo(1, 2)
+    from time import sleep
+
+    servo = Servo()
+    for angle in range(60):
+        for leg_i in range(3):
+            for part_j in range(3):
+                servo.set_angle(leg_i, part_j, 60 + angle)
+        sleep(0.02)

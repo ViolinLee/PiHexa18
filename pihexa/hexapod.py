@@ -15,9 +15,7 @@ class Hexapod(object):
         self.servo = None
 
     def init(self, setting=False):
-        # LFlash.begin()
-        # calibrationLoad()
-
+        self.load_calibration(calibration_path)
         if not setting:
             self.process_movement(MovementMode.MOVEMENT_STANDBY.value)
         print("PiHexa init done.")
@@ -30,6 +28,12 @@ class Hexapod(object):
         location = self._movement.next(elapsed=elapsed)
         for i in range(6):
             self.__legs[i].move_tip(location.get(i))
+
+    def process_calibration(self):
+        return
+
+    def load_calibration(self, json_path):
+        return
 
 
 class VirtualHexapod(Hexapod):

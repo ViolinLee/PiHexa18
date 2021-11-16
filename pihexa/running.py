@@ -44,7 +44,6 @@ if __name__ == '__main__':
     # Hexapod instance
     pi_hexa = Hexapod()
     pi_hexa.init()
-    pi_hexa.calibrate(calibration_path)
 
     while True:
         if calibrator.calibrating is True:
