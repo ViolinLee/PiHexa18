@@ -7,7 +7,7 @@ from numpy import interp
 class Servo(object):
     def __init__(self, offset_array=None, left_address=0x40, right_address=0x41, pulse_min=544, pulse_max=2400):
         if offset_array is None:
-            offset_array = [0] * 18
+            offset_array = [[0, 0, 0]] * 6
         self.pwm_left = PCA9685(left_address)
         self.pwm_right = PCA9685(right_address)
         self.pulse_min = pulse_min
@@ -53,8 +53,9 @@ if __name__ == '__main__':
     from time import sleep
 
     servo = Servo()
-    for angle in range(60):
-        for leg_i in range(3):
-            for part_j in range(3):
-                servo.set_angle(leg_i, part_j, 60 + angle)
-        sleep(0.02)
+    while True:
+        for angle in range(145):
+            for leg_i in range(6):
+                for part_j in range(3):
+                    servo.set_angle(leg_i, part_j, angle)
+            sleep(0.02)
