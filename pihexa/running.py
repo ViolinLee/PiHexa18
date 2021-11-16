@@ -1,54 +1,53 @@
-import os
-import argparse
+import _thread
 from time import time, sleep
 from hexapod import Hexapod
 from remote import Remote
+from web_calibrator import Calibrator, web_callback
 from config import movement_interval, calibration_path
 
 
-react_delay = movement_interval * 0.001
+DEBUG = False
+REACT_DELAY = movement_interval * 0.001
+loop_mode = 1  # default normal-loop
 
 
 def normal_loop():
-    while True:
-        if not remote.connected():
-            sleep(1 - react_delay)
+    if not remote.is_connected():
+        sleep(1 - REACT_DELAY)
 
-        t0 = time()
-        remote.process()
-        mode = remote.mode
-
-        pi_hexa.process_movement(mode, react_delay)
-        time_spent = time() - t0
-        if time_spent < react_delay:
-            sleep(react_delay - time_spent)
-        else:
-            print(time_spent)
-
-
-def calibrating_loop(path):
-    # json file
-    with open(path, 'w') as f:
+    t0 = time()
+    pi_hexa.process_movement(remote.mode, REACT_DELAY)
+    time_spent = time() - t0
+    if time_spent < REACT_DELAY:
+        sleep(REACT_DELAY - time_spent)
+    elif DEBUG:
+        print(time_spent)
+    else:
         pass
-    return
+
+
+def calibrating_loop():
+    with open(calibration_path, 'w') as f:
+        while calibrator.calibrating is True:
+            pi_hexa.process_calibration(calibrator.data)  # 动作同时将calibration信息保存在pi_hexa私有变量
+        f.write(str(calibrator.data))
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--mode', type=str, default=2, help="Action mode: 0-calibration 1-normal running")
-    args = parser.parse_args()
-    mode = args.mode
-
-    # Remote controller instance
+    # Remote controller instance (BTCOM)
     remote = Remote()
+
+    # WEB calibrator instance (WLAN STA)
+    calibrator = Calibrator()
+    _thread.start_new_thread(web_callback, (calibrator, ))
 
     # Hexapod instance
     pi_hexa = Hexapod()
     pi_hexa.init()
+    pi_hexa.calibrate(calibration_path)
 
-    if mode == 0:
-        calibrating_loop(calibration_path)
-    elif mode == 1:
-        normal_loop()
-    else:
-        raise ValueError
+    while True:
+        if calibrator.calibrating is True:
+            calibrating_loop()
+        else:
+            normal_loop()

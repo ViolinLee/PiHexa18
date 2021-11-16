@@ -14,7 +14,7 @@ class Hexapod(object):
         self._mode = MovementMode.MOVEMENT_STANDBY.value
         self.servo = None
 
-    def init(self, setting):
+    def init(self, setting=False):
         # LFlash.begin()
         # calibrationLoad()
 

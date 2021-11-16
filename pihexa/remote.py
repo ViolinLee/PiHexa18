@@ -1,9 +1,37 @@
+from btpycom import *
+
+
 class Remote(object):
-    def __init__(self):
+    def __init__(self, service_name='PiHexa BTServer'):
+        self.bt_server = BTServer(service_name, self.on_state_changed)
         self.mode = 0
 
-    def connected(self):
-        return False
+    def on_state_changed(self, state, msg):
+        if state == "CONNECTING":
+            print("Connecting", msg)
+        elif state == "CONNECTION_FAILED":
+            print("Connection failed", msg)
+        elif state == "CONNECTED":
+            print("Connected", msg)
+        elif state == "DISCONNECTED":
+            print("Disconnected", msg)
+        elif state == "MESSAGE":
+            print("Message", msg)
+            if msg in [str(num) for num in range(14)]:  # mode
+                self.mode = int(msg)
+            else:
+                raise ValueError
+        else:
+            print("State", state)
 
-    def process(self):
-        return
+    def disconnect(self):
+        self.bt_server.disconnect()
+
+    def send_msg(self, msg):
+        self.bt_server.sendMessage(msg)
+
+    def is_connected(self):
+        return self.bt_server.isClientConnected
+
+    def is_terminated(self):
+        return self.bt_server.isServerRunning
