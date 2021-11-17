@@ -25,6 +25,9 @@ movement_switch_duration = 150  # 步态路径路径点的间隔（计算上）
 
 # calibration results saved path
 calibration_path = "calibration.json"
+html_path = 'calibration.html'
+with open(html_path) as f:
+    html_bytes = f.read().encode()
 
 # default mounting angle
 default_angle = (-45, 0, 45, 135, 180, 225)

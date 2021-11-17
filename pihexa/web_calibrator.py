@@ -1,6 +1,7 @@
 import subprocess
 from time import sleep
 from socket import socket, gethostname, gethostbyname, SOL_SOCKET, SO_REUSEADDR, AF_INET, SOCK_STREAM
+from config import html_bytes
 
 
 def is_wlan_connected():
@@ -52,13 +53,20 @@ def web_callback(leg_calibrator):
 
 class Calibrator:
     def __init__(self):
-        self.panel_html = 'html'
+        self.panel_html = html_bytes
         self.calibrating = False
         self.data = [0] * 18
 
     def process_panel(self, panel_req):
         # update data
-        if 'GET /?MODE=TrotGait' in panel_req:
-            self.calibrating = True
-        if 'GET /?MODE=SAVE' in panel_req:
-            self.calibrating = False
+        tag = 'GET /calibration='
+        if tag in panel_req:
+            index = panel_req.find(tag)
+            req_data = [int(str_num) for str_num in panel_req[index + len(tag):].split()[0].split(',')]
+
+            temp = [req_data[3 * i: 3 * i + 3] for i in range(6) if i % 2 == 1]
+            temp_r = [req_data[3 * i: 3 * i + 3] for i in range(6) if i % 2 == 0]
+            temp_r.reverse()
+            calibration_data = temp + temp_r
+
+            self.data = calibration_data
