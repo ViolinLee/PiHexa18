@@ -5,7 +5,7 @@ from pca9685 import PCA9685
 
 
 class Servo(object):
-    def __init__(self, offset_array=None, left_address=0x40, right_address=0x41, pulse_min=544, pulse_max=2400):
+    def __init__(self, offset_array=None, left_address=0x40, right_address=0x41, pulse_min=544, pulse_max=2400, freq=50):
         if offset_array is None:
             offset_array = [[0, 0, 0]] * 6
         self.pwm_left = PCA9685(left_address)
@@ -14,6 +14,10 @@ class Servo(object):
         self.pulse_max = pulse_max
         self.pulse_middle = (self.pulse_min + self.pulse_max) / 2
         self.offset_array = offset_array
+
+        # Set pwm frequency
+        self.pwm_left.setPWMFreq(freq)
+        self.pwm_right.setPWMFreq(freq)
 
     def angle2pulse(self, km_angle):
         # return interp(km_angle, [-90, 90], [pulse_min, pulse_max])  # 注意运动学定义的0°对应舵机90°位置

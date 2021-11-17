@@ -59,7 +59,7 @@ class PCA9685:
         if (self.debug):
             print("Final pre-scale: %d" % prescale)
 
-        oldmode = self.read(self.__MODE1);
+        oldmode = self.read(self.__MODE1)
         newmode = (oldmode & 0x7F) | 0x10  # sleep
         self.write(self.__MODE1, newmode)  # go to sleep
         self.write(self.__PRESCALE, int(math.floor(prescale)))
@@ -83,7 +83,6 @@ class PCA9685:
 
 
 if __name__ == '__main__':
-
     pwm = PCA9685(0x40, debug=False)
     pwm.setPWMFreq(50)
     while True:

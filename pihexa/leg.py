@@ -7,6 +7,7 @@ from math import sin, cos, pi, atan2, sqrt, acos
 
 
 hpi = pi/2
+leg_servo = Servo()
 
 
 class Leg(object):
@@ -15,7 +16,6 @@ class Leg(object):
     """
     def __init__(self, leg_index):
         self._leg_index = leg_index
-        self._servos = [Servo(self._leg_index, i) for i in range(3)]
 
         """ 
         local_conv: 世界坐标系上的表达转换到本地坐标系上的表达
@@ -132,8 +132,7 @@ class Leg(object):
         angles = self._inverse_kinematics(target_point_local)
         # Logging info
         for i in range(3):
-            self._servos[i].set_angle(angles[i])
-        print(1)
+            leg_servo.set_angle(self._leg_index, i, angles[i])
 
 
 class VirtualLeg(Leg):
