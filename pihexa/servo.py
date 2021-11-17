@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from pca9685 import PCA9685
-from numpy import interp
+# from numpy import interp
 
 
 class Servo(object):
@@ -15,11 +15,11 @@ class Servo(object):
         self.pulse_middle = (self.pulse_min + self.pulse_max) / 2
         self.offset_array = offset_array
 
-    def angle2pulse(self, angle):
-        # 注意运动学定义的0°对应舵机90°位置
-        return self.pulse_middle + interp(angle, [0, 180], [self.pulse_min, self.pulse_max])
+    def angle2pulse(self, km_angle):
+        # return interp(km_angle, [-90, 90], [pulse_min, pulse_max])  # 注意运动学定义的0°对应舵机90°位置
+        return (self.pulse_min + self.pulse_max) / 2 + km_angle * ((self.pulse_max - self.pulse_min) / 180)
 
-    def set_angle(self, leg_index, part_index, angle):
+    def set_angle(self, leg_index, part_index, km_angle):
         # switch left, right pwm
         if leg_index == 0:
             pwm_index = 5 + part_index
@@ -45,7 +45,7 @@ class Servo(object):
         inverse = True if part_index == 1 else False
         correct = -1 if inverse else 1
 
-        pulse = correct * self.angle2pulse(angle) + self.offset_array[leg_index][part_index]
+        pulse = correct * self.angle2pulse(km_angle) + self.offset_array[leg_index][part_index]
         pwm.setServoPulse(pwm_index, pulse)
 
 
@@ -54,7 +54,12 @@ if __name__ == '__main__':
 
     servo = Servo()
     while True:
-        for angle in range(145):
+        for angle in range(-90, 91):
+            for leg_i in range(6):
+                for part_j in range(3):
+                    servo.set_angle(leg_i, part_j, angle)
+            sleep(0.02)
+        for angle in range(90, -91, -1):
             for leg_i in range(6):
                 for part_j in range(3):
                     servo.set_angle(leg_i, part_j, angle)
