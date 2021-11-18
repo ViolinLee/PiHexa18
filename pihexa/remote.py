@@ -7,22 +7,22 @@ class Remote(object):
         self.mode = 0
 
     def on_state_changed(self, state, msg):
-        if state == "CONNECTING":
-            print("Connecting", msg)
-        elif state == "CONNECTION_FAILED":
-            print("Connection failed", msg)
+        if state == "LISTENING":
+            print("Listening", msg)
         elif state == "CONNECTED":
             print("Connected", msg)
-        elif state == "DISCONNECTED":
-            print("Disconnected", msg)
         elif state == "MESSAGE":
             print("Message", msg)
+            """
             if msg in [str(num) for num in range(14)]:  # mode
                 self.mode = int(msg)
             else:
                 raise ValueError
+            """
+        elif state == "DISCONNECTED":
+            print("Disconnected", msg)
         else:
-            print("State", state)
+            raise ValueError
 
     def disconnect(self):
         self.bt_server.disconnect()
@@ -35,3 +35,7 @@ class Remote(object):
 
     def is_terminated(self):
         return self.bt_server.isServerRunning
+
+
+if __name__ == '__main__':
+    remote = Remote()

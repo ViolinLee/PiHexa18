@@ -490,6 +490,3 @@ class ClientHandler(Thread):
             BTClient.debug("Exception from blocking conn.recv(), Msg: " + str(sys.exc_info()[0]))
             self.client.disconnect()
         BTClient.debug("ClientHandler thread finished")
-
-
-
