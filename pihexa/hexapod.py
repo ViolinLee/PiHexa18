@@ -4,11 +4,13 @@ from movement import Movement, MovementMode
 from leg import Leg, VirtualLeg
 from config import *
 from base import point3d
+from servo import Servo
 
 
 class Hexapod(object):
     def __init__(self):
-        self.__legs = [Leg(i) for i in range(6)]
+        leg_servo = Servo()
+        self.__legs = [Leg(i, leg_servo) for i in range(6)]
         self._movement = Movement(MovementMode.MOVEMENT_STANDBY.value, False)
         self._mode = MovementMode.MOVEMENT_STANDBY.value
 

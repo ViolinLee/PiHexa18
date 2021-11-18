@@ -5,23 +5,21 @@ from pca9685 import PCA9685
 
 
 class Servo(object):
-    def __init__(self, offset_array=None, left_address=0x40, right_address=0x41, pulse_min=544, pulse_max=2400, freq=50):
-        if offset_array is None:
-            offset_array = [[0, 0, 0]] * 6
+    def __init__(self, left_address=0x40, right_address=0x41, pulse_min=544, pulse_max=2400, freq=50):
         self.pwm_left = PCA9685(left_address)
         self.pwm_right = PCA9685(right_address)
         self.pulse_min = pulse_min
         self.pulse_max = pulse_max
         self.pulse_middle = (self.pulse_min + self.pulse_max) / 2
-        self.offset_array = offset_array
 
         # Set pwm frequency
         self.pwm_left.setPWMFreq(freq)
         self.pwm_right.setPWMFreq(freq)
 
-    def angle2pulse(self, km_angle):
-        # return interp(km_angle, [-90, 90], [pulse_min, pulse_max])  # 注意运动学定义的0°对应舵机90°位置
-        return (self.pulse_min + self.pulse_max) / 2 + km_angle * ((self.pulse_max - self.pulse_min) / 180)
+    def angle2pulse(self, km_angle, reverse):
+        correct = -1 if reverse else 1
+        # return interp(correct * km_angle, [-90, 90], [pulse_min, pulse_max])  # 注意运动学定义的0°对应舵机90°位置
+        return (self.pulse_min + self.pulse_max) / 2 + correct * km_angle * ((self.pulse_max - self.pulse_min) / 180)
 
     def set_angle(self, leg_index, part_index, km_angle):
         # switch left, right pwm
@@ -47,9 +45,7 @@ class Servo(object):
             raise ValueError
 
         inverse = True if part_index == 1 else False
-        correct = -1 if inverse else 1
-
-        pulse = correct * self.angle2pulse(km_angle) + self.offset_array[leg_index][part_index]
+        pulse = self.angle2pulse(km_angle, inverse)
         pwm.setServoPulse(pwm_index, pulse)
 
 

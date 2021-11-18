@@ -2,21 +2,19 @@
 
 from config import *
 from math_utils import *
-from servo import *
 from math import sin, cos, pi, atan2, sqrt, acos
 
 
 hpi = pi/2
-leg_servo = Servo()
 
 
 class Leg(object):
     """
     定义六足机器人单腿类，包括基坐标转换和正逆运动学相关类函数。
     """
-    def __init__(self, leg_index):
+    def __init__(self, leg_index, leg_servo):
         self._leg_index = leg_index
-
+        self._leg_servo = leg_servo
         """ 
         local_conv: 世界坐标系上的表达转换到本地坐标系上的表达
         world_conv: 本地坐标系上的表达转换到世界坐标系上的表达
@@ -132,7 +130,7 @@ class Leg(object):
         angles = self._inverse_kinematics(target_point_local)
         # Logging info
         for i in range(3):
-            leg_servo.set_angle(self._leg_index, i, angles[i])
+            self._leg_servo.set_angle(self._leg_index, i, angles[i])
 
 
 class VirtualLeg(Leg):
