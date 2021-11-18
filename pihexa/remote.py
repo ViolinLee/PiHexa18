@@ -2,8 +2,8 @@ from btpycom import *
 
 
 class Remote(object):
-    def __init__(self, service_name='PiHexa BTServer'):
-        self.bt_server = BTServer(service_name, self.on_state_changed)
+    def __init__(self, service_name='PiHexa BTServer', is_verbose=False):
+        self.bt_server = BTServer(service_name, self.on_state_changed, is_verbose)
         self.mode = 0
 
     def on_state_changed(self, state, msg):

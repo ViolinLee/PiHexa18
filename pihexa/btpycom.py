@@ -205,8 +205,8 @@ class ServerHandler(Thread):
                 while inBlock:
                     reply = self.server.clientSocket.recv(bufSize)
                     data.extend(reply)
-                    if '\0' in data:
-                        junk = data.split('\0')  # more than 1 message may be received if
+                    if b'\0' in data:  # 注：C/C++中'\0'为字符串结尾
+                        junk = data.split(b'\0')  # more than 1 message may be received if
                         # transfer is fast. data: xxxx\0yyyyy\0zzz\0
                         for i in range(len(junk) - 1):
                             BTServer.debug("Received message: " + str(junk[i]) + " len: " + str(len(junk[i])))
@@ -474,8 +474,8 @@ class ClientHandler(Thread):
                 while inBlock:
                     reply = self.client.clientSocket.recv(bufSize)
                     data.extend(reply)
-                    if '\0' in data:
-                        junk = data.split('\0')  # more than 1 message may be received if
+                    if b'\0' in data:
+                        junk = data.split(b'\0')  # more than 1 message may be received if
                         # transfer is fast. data: xxxx\0yyyyy\0zzz\0
                         for i in range(len(junk) - 1):
                             BTClient.debug("Received message: " + str(junk[i]) + " len: " + str(len(junk[i])))
