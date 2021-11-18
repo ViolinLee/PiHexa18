@@ -110,7 +110,7 @@ if __name__ == '__main__':
         # output results
         with open(args.out_path, "w") as f:
             f.write('"""This file is generated, dont directly modify content..."""\n\n')
-            f.write("from pihexa.config import *\n")
+            f.write("from config import *\n")
             for path, data in results.items():
                 f.write(generate_py_body(path, data))
                 f.write("\n")

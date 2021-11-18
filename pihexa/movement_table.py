@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from path_utils.movement_paths import *
+from movement_paths import *
 from config import k_standby, standby_entries, standby_entries_count
 
 """

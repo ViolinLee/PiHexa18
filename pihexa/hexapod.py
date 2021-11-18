@@ -29,7 +29,7 @@ class Hexapod(object):
         for i in range(6):
             self.__legs[i].move_tip(location.get(i))
 
-    def process_calibration(self):
+    def process_calibration(self, calibration_data):
         return
 
     def load_calibration(self, json_path):

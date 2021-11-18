@@ -23,7 +23,7 @@ def web_callback(leg_calibrator):
         sleep(2)
 
     # Get STA IP
-    sta_ip = gethostbyname(gethostname())
+    sta_ip = gethostbyname(gethostname() + '.local')
     print('PiHexa IP: ', sta_ip)
 
     # Setup Socket WebServer

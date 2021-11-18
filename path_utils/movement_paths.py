@@ -1,6 +1,6 @@
 """This file is generated, dont directly modify content..."""
 
-from pihexa.config import *
+from config import *
 
 forward_paths = [[(p1_x + 0.00, p1_y + 0.00, p1_z + 25.00), (p2_x + 0.00, p2_y + 0.00, p2_z + 0.00), (p3_x + 0.00, p3_y + 0.00, p3_z + 25.00), (p4_x + 0.00, p4_y + 0.00, p4_z + 0.00), (p5_x + 0.00, p5_y + 0.00, p5_z + 25.00), (p6_x + 0.00, p6_y + 0.00, p6_z + 0.00)],
                  [(p1_x + 0.00, p1_y + 7.73, p1_z + 23.78), (p2_x + 0.00, p2_y + -5.00, p2_z + 0.00), (p3_x + 0.00, p3_y + 7.73, p3_z + 23.78), (p4_x + 0.00, p4_y + -5.00, p4_z + 0.00), (p5_x + 0.00, p5_y + 7.73, p5_z + 23.78), (p6_x + 0.00, p6_y + -5.00, p6_z + 0.00)],
