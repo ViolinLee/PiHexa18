@@ -45,7 +45,7 @@ class Hexapod(object):
             pass
 
     def load_calibration(self, json_path):
-        with open(json_path) as f:
+        with open(json_path, 'r') as f:
             json_data = json.load(f)
             calibration_data = json_data['calibration']
             version = json_data['update_time']
@@ -53,7 +53,7 @@ class Hexapod(object):
         print("Load calibration data: {0}\nVersion: {1}".format(calibration_data, version))
 
     def save_calibration(self, json_path):
-        with open(json_path) as f:
+        with open(json_path, 'w') as f:
             calibration_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             json_dict = {'update_time': calibration_time,
                          'calibration': self.leg_servo.offset}

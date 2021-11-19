@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import _thread
 from time import time, sleep
 from hexapod import Hexapod
@@ -27,10 +29,9 @@ def normal_loop():
 
 
 def calibrating_loop():
-    with open(calibration_path, 'w') as f:
-        while calibrator.calibrating is True:
-            pi_hexa.process_calibration(calibrator.data)  # 动作同时将calibration信息保存在pi_hexa私有变量
-        f.write(str(calibrator.data))
+    while calibrator.calibrating is True:
+        pi_hexa.process_calibration(calibrator.data)  # 动作同时将calibration信息保存在pi_hexa私有变量
+    pi_hexa.save_calibration(calibration_path)
 
 
 if __name__ == '__main__':

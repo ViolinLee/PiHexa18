@@ -77,4 +77,4 @@ class Calibrator:
 
             self.data = calibration_data
         else:
-            raise ValueError("No matching Url route")
+            pass
