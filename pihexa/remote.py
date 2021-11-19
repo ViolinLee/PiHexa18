@@ -13,12 +13,10 @@ class Remote(object):
             print("Connected", msg)
         elif state == "MESSAGE":
             print("Message", msg)
-            """
             if msg in [str(num) for num in range(14)]:  # mode
                 self.mode = int(msg)
             else:
                 raise ValueError
-            """
         elif state == "DISCONNECTED":
             print("Disconnected", msg)
         else:

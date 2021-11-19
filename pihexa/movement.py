@@ -86,6 +86,3 @@ class Movement(object):
         self.__remain_time -= elapsed
 
         return self.__position
-
-
-

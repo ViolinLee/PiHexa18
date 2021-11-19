@@ -4,9 +4,20 @@
            height:30px;
            Text-align:center;
     }
+    button {
+           color: black;
+           background: lightblue;
+           border: 2px solid #000;
+           border-radius: 3px;
+           position: center;
+    }
 </style>
 
-<div class="p-quantity">
+<div style="text-align: center; display: block" class="p-quantity">
+       <span align="center" style="text-align: center; display: inline-block;padding: 5px;border: 1px solid #fc0; font-size: 120%;font-weight: bold;">
+              <button onclick="sendClibStatus('start')" name="Params" value="Speed" type="submit" style="width:120px; height: 30px; Text-align: center;">Start Calibration</button>
+              <button onclick="sendClibStatus('finish')" name="Params" value="Speed" type="submit" style="width:120px; height: 30px; Text-align: center;">Finish Calibration</button>
+       </span><br>
        <!--Left Frontal-->
        <span><span align="center" style="display:inline-block;margin:10px;padding:5px;border:1px solid #fc0; font-size: 120%;font-weight: bold;">
        <input type="button" class="decrease" value="-"> <input type="text" class="quantity" value="0" onchange="sendData()"/> <input type="button" class="increase" value="+">
@@ -82,5 +93,10 @@ function sendData() {
 
     const xmlHttp = new XMLHttpRequest();
     xmlHttp.open("GET","calibration=" + calibration,true); xmlHttp.send()
+}
+
+function sendClibStatus(status) {
+       const xmlHttp = new XMLHttpRequest();
+       xmlHttp.open("GET", status, true); xmlHttp.send()
 }
 </script>

@@ -52,17 +52,23 @@ def web_callback(leg_calibrator):
 
 
 class Calibrator:
-    def __init__(self):
+    def __init__(self, initial_data):
         self.panel_html = html_bytes
         self.calibrating = False
-        self.data = [0] * 18
+        self.data = initial_data
 
     def process_panel(self, panel_req):
-        # update data
-        tag = 'GET /calibration='
-        if tag in panel_req:
-            index = panel_req.find(tag)
-            req_data = [int(str_num) for str_num in panel_req[index + len(tag):].split()[0].split(',')]
+        start_tag = 'GET /start'
+        finish_tag = 'GET /finish'
+        cali_tag = 'GET /calibration='
+
+        if start_tag in panel_req:
+            self.calibrating = True
+        elif finish_tag in panel_req:
+            self.calibrating = False
+        elif cali_tag in panel_req:  # update data
+            index = panel_req.find(cali_tag)
+            req_data = [int(str_num) for str_num in panel_req[index + len(cali_tag):].split()[0].split(',')]
 
             temp = [req_data[3 * i: 3 * i + 3] for i in range(6) if i % 2 == 1]
             temp_r = [req_data[3 * i: 3 * i + 3] for i in range(6) if i % 2 == 0]
@@ -70,3 +76,5 @@ class Calibrator:
             calibration_data = temp + temp_r
 
             self.data = calibration_data
+        else:
+            raise ValueError("No matching Url route")

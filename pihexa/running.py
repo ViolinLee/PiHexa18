@@ -37,13 +37,13 @@ if __name__ == '__main__':
     # Remote controller instance (BTCOM)
     remote = Remote()
 
-    # WEB calibrator instance (WLAN STA)
-    calibrator = Calibrator()
-    _thread.start_new_thread(web_callback, (calibrator, ))
-
     # Hexapod instance
     pi_hexa = Hexapod()
     pi_hexa.init()
+
+    # WEB calibrator instance (WLAN STA)
+    calibrator = Calibrator(pi_hexa.leg_servo.offset)
+    _thread.start_new_thread(web_callback, (calibrator, ))
 
     while True:
         if calibrator.calibrating is True:
