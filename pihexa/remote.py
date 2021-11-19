@@ -1,4 +1,5 @@
 from btpycom import *
+from movement import MovementMode
 
 
 class Remote(object):
@@ -13,10 +14,32 @@ class Remote(object):
             print("Connected", msg)
         elif state == "MESSAGE":
             print("Message", msg)
-            if msg in [str(num) for num in range(14)]:  # mode
-                self.mode = int(msg)
+            if msg == 'RotateX':
+                self.mode = MovementMode.MOVEMENT_ROTATEX.value
+            elif msg == 'RotateY':
+                self.mode = MovementMode.MOVEMENT_ROTATEY.value
+            elif msg == 'RotateZ':
+                self.mode = MovementMode.MOVEMENT_ROTATEZ.value
+            elif msg == 'Twist':
+                self.mode = MovementMode.MOVEMENT_TWIST.value
+            elif msg == 'TurnLeft':
+                self.mode = MovementMode.MOVEMENT_TURNLEFT.value
+            elif msg == 'TurnRight':
+                self.mode = MovementMode.MOVEMENT_TURNRIGHT.value
+            elif msg == 'Run':
+                self.mode = MovementMode.MOVEMENT_FORWARDFAST.value
+            elif msg == 'Forward':
+                self.mode = MovementMode.MOVEMENT_FORWARD.value
+            elif msg == 'Climb':
+                self.mode = MovementMode.MOVEMENT_CLIMB.value
+            elif msg == 'ShiftLeft':
+                self.mode = MovementMode.MOVEMENT_SHIFTLEFT.value
+            elif msg == 'ShiftRight':
+                self.mode = MovementMode.MOVEMENT_SHIFTRIGHT.value
+            elif msg == 'Backward':
+                self.mode = MovementMode.MOVEMENT_BACKWARD.value
             else:
-                raise ValueError
+                pass
         elif state == "DISCONNECTED":
             print("Disconnected", msg)
         else:
