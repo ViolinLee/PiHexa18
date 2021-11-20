@@ -14,29 +14,29 @@ class Remote(object):
             print("Connected", msg)
         elif state == "MESSAGE":
             print("Message", msg)
-            if msg == 'RotateX':
+            if msg == "bytearray(b'RotateX')":
                 self.mode = MovementMode.MOVEMENT_ROTATEX.value
-            elif msg == 'RotateY':
+            elif msg == "bytearray(b'RotateY')":
                 self.mode = MovementMode.MOVEMENT_ROTATEY.value
-            elif msg == 'RotateZ':
+            elif msg == "bytearray(b'RotateZ')":
                 self.mode = MovementMode.MOVEMENT_ROTATEZ.value
-            elif msg == 'Twist':
+            elif msg == "bytearray(b'Twist')":
                 self.mode = MovementMode.MOVEMENT_TWIST.value
-            elif msg == 'TurnLeft':
+            elif msg == "bytearray(b'TurnLeft')":
                 self.mode = MovementMode.MOVEMENT_TURNLEFT.value
-            elif msg == 'TurnRight':
+            elif msg == "bytearray(b'TurnRight')":
                 self.mode = MovementMode.MOVEMENT_TURNRIGHT.value
-            elif msg == 'Run':
+            elif msg == "bytearray(b'Run')":
                 self.mode = MovementMode.MOVEMENT_FORWARDFAST.value
-            elif msg == 'Forward':
+            elif msg == "bytearray(b'Forward')":
                 self.mode = MovementMode.MOVEMENT_FORWARD.value
-            elif msg == 'Climb':
+            elif msg == "bytearray(b'Climb')":
                 self.mode = MovementMode.MOVEMENT_CLIMB.value
-            elif msg == 'ShiftLeft':
+            elif msg == "bytearray(b'ShiftLeft')":
                 self.mode = MovementMode.MOVEMENT_SHIFTLEFT.value
-            elif msg == 'ShiftRight':
+            elif msg == "bytearray(b'ShiftRight')":
                 self.mode = MovementMode.MOVEMENT_SHIFTRIGHT.value
-            elif msg == 'Backward':
+            elif msg == "bytearray(b'Backward')":
                 self.mode = MovementMode.MOVEMENT_BACKWARD.value
             else:
                 pass

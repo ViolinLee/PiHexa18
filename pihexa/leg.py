@@ -8,13 +8,9 @@ from math import sin, cos, pi, atan2, sqrt, acos
 hpi = pi/2
 
 
-class Leg(object):
-    """
-    定义六足机器人单腿类，包括基坐标转换和正逆运动学相关类函数。
-    """
-    def __init__(self, leg_index, leg_servo):
+class BaseLeg(object):
+    def __init__(self, leg_index):
         self._leg_index = leg_index
-        self._leg_servo = leg_servo
         """ 
         local_conv: 世界坐标系上的表达转换到本地坐标系上的表达
         world_conv: 本地坐标系上的表达转换到世界坐标系上的表达
@@ -65,48 +61,8 @@ class Leg(object):
     def translate2world(self, local_point: point3d):
         return self._world_conv(local_point) + self._mount_position
 
-    def set_joint_angle(self, angles):
-        out_point = self._forward_kinematics(angles)
-        self.move_tip_local(out_point)
-
-    """word coordiante system (default)"""
-    def move_tip(self, target_point_world: point3d):
-        if target_point_world == self._tip_pos:
-            return
-        dest_local = self.translate2local(target_point_world)
-        # logging info
-        self.__move(dest_local)
-        self._tip_pos = target_point_world
-        self._tip_pos_local = dest_local
-
-    def get_tip_position(self):
-        return self._tip_pos
-
-    """local coordinate system version"""
-    def move_tip_local(self, target_point_local: point3d):
-        if target_point_local == self._tip_pos_local:
-            return
-        dest_world = self.translate2world(target_point_local)
-        self.__move(target_point_local)
-        self._tip_pos = dest_world
-        self._tip_pos_local = target_point_local
-
-    def get_tip_position_local(self):
-        return self._tip_pos_local
-
-    """forward and inverse kinematics calculations are below local coordinate"""
-    def _forward_kinematics(self, angles):
-        radians = [angle * pi / 180 for angle in angles]
-        x = leg_joint1_2joint2 + cos(radians[1]) * leg_joint2_2joint3 + cos(radians[1] + radians[2] - hpi) * leg_joint3_2tip
-
-        out_point = point3d()
-        out_point.x = leg_root2joint1 + cos(radians[0]) * x
-        out_point.y = sin(radians[0]) * x
-        out_point.z = sin(radians[1]) * leg_joint2_2joint3 + sin(radians[1] + radians[2] - hpi) * leg_joint3_2tip
-
-        return out_point
-
-    def _inverse_kinematics(self, target_point: point3d):
+    @staticmethod
+    def inverse_kinematics(target_point: point3d):
         """坐标原点在根部舵机安装处"""
         angles = [0.0] * 3
 
@@ -126,21 +82,73 @@ class Leg(object):
 
         return angles
 
+    def get_tip_position_local(self):
+        return self._tip_pos_local
+
+
+class RealLeg(BaseLeg):
+    """
+    定义六足机器人单腿类，包括基坐标转换和正逆运动学相关类函数。
+    """
+    def __init__(self, leg_index, leg_servo):
+        super().__init__(leg_index)
+        self._leg_servo = leg_servo
+
+    """forward and inverse kinematics calculations are below local coordinate"""
+    @staticmethod
+    def forward_kinematics(angles):
+        radians = [angle * pi / 180 for angle in angles]
+        x = leg_joint1_2joint2 + cos(radians[1]) * leg_joint2_2joint3 + cos(radians[1] + radians[2] - hpi) * leg_joint3_2tip
+
+        out_point = point3d()
+        out_point.x = leg_root2joint1 + cos(radians[0]) * x
+        out_point.y = sin(radians[0]) * x
+        out_point.z = sin(radians[1]) * leg_joint2_2joint3 + sin(radians[1] + radians[2] - hpi) * leg_joint3_2tip
+
+        return out_point
+
+    def set_joint_angle(self, angles):
+        out_point = self.forward_kinematics(angles)
+        self.move_tip_local(out_point)
+
+    def move_tip(self, target_point_world: point3d):
+        """word coordiante system (default)"""
+        if target_point_world == self._tip_pos:
+            return
+        dest_local = self.translate2local(target_point_world)
+        # logging info
+        self.__move(dest_local)
+        self._tip_pos = target_point_world
+        self._tip_pos_local = dest_local
+
+    def get_tip_position(self):
+        return self._tip_pos
+
+    def move_tip_local(self, target_point_local: point3d):
+        """local coordinate system version"""
+        if target_point_local == self._tip_pos_local:
+            return
+        dest_world = self.translate2world(target_point_local)
+        self.__move(target_point_local)
+        self._tip_pos = dest_world
+        self._tip_pos_local = target_point_local
+
     def __move(self, target_point_local: point3d):
-        angles = self._inverse_kinematics(target_point_local)
+        angles = self.inverse_kinematics(target_point_local)
         # Logging info
         for i in range(3):
             self._leg_servo.set_angle(self._leg_index, i, angles[i])
 
 
-class VirtualLeg(Leg):
+class VirtualLeg(BaseLeg):
     def __init__(self, leg_index):
         super(VirtualLeg, self).__init__(leg_index)
         self.joint_angles = [0, 30, -15]
-        self.leg_vectors_local = self._forward_kinematics(self.joint_angles)
+        self.leg_vectors_local = self.forward_kinematics(self.joint_angles)
         self.leg_vectors = [self.translate2world(point) for point in self.leg_vectors_local]
 
-    def _forward_kinematics(self, angles):
+    @staticmethod
+    def forward_kinematics(angles):
         """leg_vectors: point3d list with length of 5"""
         radians = [angle * pi / 180 for angle in angles]
         joint1_pos = point3d(leg_root2joint1, 0, 0)
@@ -166,8 +174,8 @@ class VirtualLeg(Leg):
         self._tip_pos_local = dest_local
 
     def __move(self, target_point_local: point3d):
-        angles = self._inverse_kinematics(target_point_local)
+        angles = self.inverse_kinematics(target_point_local)
         self.joint_angles = angles
         # To simulate movement on matplotlib figure
-        self.leg_vectors_local = self._forward_kinematics(angles)
+        self.leg_vectors_local = self.forward_kinematics(angles)
         self.leg_vectors = [self.translate2world(point) for point in self.leg_vectors_local]

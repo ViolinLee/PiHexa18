@@ -2,7 +2,10 @@
 
 import time
 import math
-import smbus
+try:
+    import smbus
+except ModuleNotFoundError:
+    pass
 
 
 # ============================================================================

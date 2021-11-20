@@ -2,20 +2,25 @@
 
 import json
 from movement import Movement, MovementMode
-from leg import Leg, VirtualLeg
+from leg import RealLeg, VirtualLeg
 from config import *
 from base import point3d
-from servo import Servo
 from time import sleep
+from servo import Servo
 from datetime import datetime
 
 
-class Hexapod(object):
+class BaseHexapod(object):
     def __init__(self):
-        self.leg_servo = Servo()
         self._movement = Movement(MovementMode.MOVEMENT_STANDBY.value, False)
         self._mode = MovementMode.MOVEMENT_STANDBY.value
-        self.__legs = [Leg(i, self.leg_servo) for i in range(6)]
+
+
+class RealHexapod(BaseHexapod):
+    def __init__(self):
+        super().__init__()
+        self.__leg_servo = Servo()
+        self.__legs = [RealLeg(i, self.__leg_servo) for i in range(6)]
 
     def init(self, setting=False):
         self.load_calibration(calibration_path)
@@ -33,13 +38,13 @@ class Hexapod(object):
             self.__legs[i].move_tip(location.get(i))
 
     def process_calibration(self, calibration_data):
-        if calibration_data != self.leg_servo.offset:
+        if calibration_data != self.__leg_servo.offset:
             # Update servo offset attribute
-            self.leg_servo.set_offset(calibration_data)
+            self.__leg_servo.set_offset(calibration_data)
             # Set all servos middle angle
             for leg_id in range(6):
                 for part_id in range(3):
-                    self.leg_servo.set_angle(leg_id, part_id, 90)
+                    self.__leg_servo.set_angle(leg_id, part_id, 90)
             sleep(0.02)
         else:
             pass
@@ -49,19 +54,22 @@ class Hexapod(object):
             json_data = json.load(f)
             calibration_data = json_data['calibration']
             version = json_data['update_time']
-            self.leg_servo.set_offset(calibration_data)
+            self.__leg_servo.set_offset(calibration_data)
         print("Load calibration data: {0}\nVersion: {1}".format(calibration_data, version))
 
     def save_calibration(self, json_path):
         with open(json_path, 'w') as f:
             calibration_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             json_dict = {'update_time': calibration_time,
-                         'calibration': self.leg_servo.offset}
+                         'calibration': self.__leg_servo.offset}
             json.dump(json_dict, f, ensure_ascii=False)
-        print("Save calibration data: {0}\nTime: {1}".format(self.leg_servo.offset, calibration_time))
+        print("Save calibration data: {0}\nTime: {1}".format(self.__leg_servo.offset, calibration_time))
+
+    def get_servo_offset(self):
+        return self.__leg_servo.offset
 
 
-class VirtualHexapod(Hexapod):
+class VirtualHexapod(BaseHexapod):
     def __init__(self, ax, origin=(0, 0, 0), initial_height=standby_z):
         super(VirtualHexapod, self).__init__()
         self.__legs = [VirtualLeg(i) for i in range(6)]
@@ -95,6 +103,7 @@ class VirtualHexapod(Hexapod):
             self._movement.set_mode(self._mode)
 
         location = self._movement.next(elapsed=elapsed)
+        print((location.get(0).x, location.get(0).y, location.get(0).z))
         for i in range(6):
             self.__legs[i].move_tip(location.get(i))
 
