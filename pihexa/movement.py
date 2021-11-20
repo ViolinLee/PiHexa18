@@ -52,12 +52,6 @@ class Movement(object):
         self.__remain_time = 0
 
     def set_mode(self, new_mode):
-        # print(standby_table.entries)
-
-        if not k_table[new_mode].entries:
-            # log_info
-            return
-
         self.__mode = new_mode
 
         table = k_table[self.__mode]

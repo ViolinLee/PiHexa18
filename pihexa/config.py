@@ -83,5 +83,5 @@ k_standby = [(p1_x, p1_y, p1_z),
              (p4_x, p4_y, p4_z),
              (p5_x, p5_y, p5_z),
              (p6_x, p6_y, p6_z)]
-standby_entries = 0
+standby_entries = (0, )
 standby_entries_count = 1  # Number of elements of variable standby_entries

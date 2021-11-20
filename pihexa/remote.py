@@ -16,7 +16,7 @@ class Remote(object):
             print("Message", msg)
             if msg == "bytearray(b'Standby')":
                 self.mode = MovementMode.MOVEMENT_STANDBY.value
-            if msg == "bytearray(b'RotateX')":
+            elif msg == "bytearray(b'RotateX')":
                 self.mode = MovementMode.MOVEMENT_ROTATEX.value
             elif msg == "bytearray(b'RotateY')":
                 self.mode = MovementMode.MOVEMENT_ROTATEY.value
