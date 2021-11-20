@@ -5,7 +5,7 @@ from movement import MovementMode
 class Remote(object):
     def __init__(self, service_name='PiHexa BTServer', is_verbose=False):
         self.bt_server = BTServer(service_name, self.on_state_changed, is_verbose)
-        self.mode = 0
+        self.mode = MovementMode.MOVEMENT_STANDBY.value
 
     def on_state_changed(self, state, msg):
         if state == "LISTENING":
@@ -14,6 +14,8 @@ class Remote(object):
             print("Connected", msg)
         elif state == "MESSAGE":
             print("Message", msg)
+            if msg == "bytearray(b'Standby')":
+                self.mode = MovementMode.MOVEMENT_STANDBY.value
             if msg == "bytearray(b'RotateX')":
                 self.mode = MovementMode.MOVEMENT_ROTATEX.value
             elif msg == "bytearray(b'RotateY')":
@@ -44,6 +46,9 @@ class Remote(object):
             print("Disconnected", msg)
         else:
             raise ValueError
+
+    def reset_standby_mode(self):
+        self.mode = MovementMode.MOVEMENT_STANDBY.value
 
     def disconnect(self):
         self.bt_server.disconnect()

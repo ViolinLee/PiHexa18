@@ -48,6 +48,7 @@ if __name__ == '__main__':
 
     while True:
         if calibrator.calibrating is True:
+            remote.reset_standby_mode()
             calibrating_loop()
         else:
             normal_loop()
