@@ -44,7 +44,7 @@ class RealHexapod(BaseHexapod):
             # Set all servos middle angle
             for leg_id in range(6):
                 for part_id in range(3):
-                    self.__leg_servo.set_angle(leg_id, part_id, 90)
+                    self.__leg_servo.set_angle(leg_id, part_id, 0)
             sleep(0.02)
         else:
             pass

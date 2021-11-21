@@ -3,9 +3,9 @@ from math_utils import *
 
 
 # mounting position
-leg_mount_left_right_x = 29.87  # position in x direction of the middle legs
-leg_mount_other_x = 22.41  # position in x direction of the fore and hind legs
-leg_mount_other_y = 55.41  # position in y direction of the fore and hind legs
+leg_mount_left_right_x = 34.2  # 29.87  # position in x direction of the middle legs
+leg_mount_other_x = 25.14  # 22.41  # position in x direction of the fore and hind legs
+leg_mount_other_y = 58.14  # 55.41  # position in y direction of the fore and hind legs
 mount_position = ((leg_mount_other_x, leg_mount_other_y, 0),
                   (leg_mount_left_right_x, 0, 0),
                   (leg_mount_other_x, -leg_mount_other_y, 0),
@@ -14,10 +14,10 @@ mount_position = ((leg_mount_other_x, leg_mount_other_y, 0),
                   (-leg_mount_other_x, leg_mount_other_y, 0))
 
 # link length
-leg_root2joint1 = 20.75
-leg_joint1_2joint2 = 28.0
-leg_joint2_2joint3 = 42.6
-leg_joint3_2tip = 89.07
+leg_root2joint1 = 19.31  # 20.75
+leg_joint1_2joint2 = 32  # 28.0
+leg_joint2_2joint3 = 41.8  # 42.6
+leg_joint3_2tip = 90.05  # 89.07
 
 # movement parameters (ms)
 movement_interval = 5  # 主程序需要的、考虑舵机响应而加的延迟时间
