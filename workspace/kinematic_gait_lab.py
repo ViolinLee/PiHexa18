@@ -31,7 +31,7 @@ def left_rotate_path(path: list, rotation_num):
     return rotated_path
 
 
-def trot_gait(gait_speed=0):
+def trot_path_global(gait_speed=0):
     # amplitudeX, amplitudeY, amplitudeZ = compute_amplitude()
     duration = 1080 if gait_speed == 0 else 3240
     num_ticks = int(duration / frame_time_ms / 2)  # total ticks divided into 2 stages, 'num_ticks' = ticks per stages
@@ -56,7 +56,7 @@ def trot_gait(gait_speed=0):
     return fr_path, br_path, fl_path, bl_path
 
 
-def creep_gait(gait_speed=0):
+def creep_path_global(gait_speed=0):
     # amplitudeX, amplitudeY, amplitudeZ = compute_amplitude()
     duration = 1080 if gait_speed == 0 else 3240
     num_ticks = int(duration / frame_time_ms / 6)  # total ticks divided into 6 stages, 'num_ticks' = ticks per stages

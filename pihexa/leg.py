@@ -17,8 +17,8 @@ class BaseLeg(object):
         """
         if self._leg_index == 0:  # 45 or -315 degree:
             self._mount_position = point3d(leg_mount_other_x, leg_mount_other_y, 0)
-            self._local_conv = rotate315
-            self._world_conv = rotate45
+            self._local_conv = rotate315  # local_P = R(local上world下，world在local上的描述) * world_P
+            self._world_conv = rotate45  # world_P = R(world上local下，local在world上的描述) * local_P
             self._tip_pos_local = point3d(p1_x, p1_y, p1_z)
             self._tip_pos = self.translate2world(self._tip_pos_local)
         elif self._leg_index == 1:  # 0 degree:
