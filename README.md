@@ -25,3 +25,7 @@ sudo cd ~/PiHexa18/pihexa && python3 running.py
 * The **body** is 3D printed PLA. I use `Anycubic i3 Mega S`.
 * Everything (3D STL, PCB schematic, Python source code) are included in the project under **GPL license**, Happy making!
 
+
+## Demonstration (Video)
+[Bilibili: 开源树莓派Python编程六足机器人功能介绍和运动测试](https://www.bilibili.com/video/BV1Pg411N7Cg/)   
+[YouTube: Open Source Hexapod using Raspberry Pi Zero 2 W and Python](https://www.youtube.com/watch?v=hejPARfBBR8&t=43s)
