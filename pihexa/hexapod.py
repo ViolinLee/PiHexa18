@@ -19,7 +19,7 @@ class BaseHexapod(object):
 class RealHexapod(BaseHexapod):
     def __init__(self):
         super().__init__()
-        self.__leg_servo = Servo()
+        self.__leg_servo = Servo(pulse_min=pulse_min, pulse_max=pulse_max)
         self.__legs = [RealLeg(i, self.__leg_servo) for i in range(6)]
 
     def init(self, setting=False):
