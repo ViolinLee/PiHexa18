@@ -3,10 +3,6 @@
 from movement_paths import *
 from config import k_standby, standby_entries, standby_entries_count
 
-"""
-This file is generated, dont directly modify content...
-"""
-
 
 class MovementTable(object):
     def __init__(self, table, length, step_duration, entries, entries_count):

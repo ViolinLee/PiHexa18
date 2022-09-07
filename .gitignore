@@ -1,1 +1,3 @@
 /path_utils/
+/.idea/
+**/__pycache__/
