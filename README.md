@@ -17,6 +17,8 @@ Run this script on raspberry-pi.
 sudo cd ~/PiHexa18/pihexa && python3 running.py
 ```
 
+![RealHexapod](resource/real_hexapod_450P.gif)
+
 ## Animation
 Run this script on PC with python packages of matplotlib and pynput installed, then you can switch walking mode of the virtual hexapod by pressing different keys on the your computer keyboard.
 
@@ -24,11 +26,10 @@ Run this script on PC with python packages of matplotlib and pynput installed, t
 python pihexa/animate.py
 ```
 
-![Animation](resource/PiHexa18.png)
+![Animation](resource/PiHexa18.png)![Animation Plot GIF](resource/animation_move_450P.gif)
 
 Watch this video to learn more: [Plot hexapod walking gait using python script (用Python写一个步态动画展示程序）](https://www.bilibili.com/video/BV1a64y187wR).   
 
-![Animation Plot GIF](resource/animation_move_450P.gif)
 
 ## Brief introduction
 * This project is the python version of the [hexapod-v2-7697](https://github.com/SmallpTsai/hexapod-v2-7697) project written in C++. I modified the size and structure, and redesigned the PCB.
