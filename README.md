@@ -26,9 +26,10 @@ Run this script on PC with python packages of matplotlib and pynput installed, t
 python pihexa/animate.py
 ```
 
-![Animation](resource/PiHexa18.png)![Animation Plot GIF](resource/animation_move_450P.gif)
 
 Watch this video to learn more: [Plot hexapod walking gait using python script (用Python写一个步态动画展示程序）](https://www.bilibili.com/video/BV1a64y187wR).   
+
+![Animation Plot GIF](resource/animation_move_450P.gif)
 
 
 ## Brief introduction
