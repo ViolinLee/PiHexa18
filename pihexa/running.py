@@ -4,6 +4,7 @@ import _thread
 from time import time, sleep
 from hexapod import RealHexapod
 from remote import Remote
+from web_remote import WebRemote
 from web_calibrator import Calibrator, web_callback
 from config import movement_interval, calibration_path
 
@@ -37,6 +38,7 @@ def calibrating_loop():
 if __name__ == '__main__':
     # Remote controller instance (BTCOM)
     remote = Remote()
+    # remote = WebRemote()
 
     # Hexapod instance
     pi_hexa = RealHexapod()

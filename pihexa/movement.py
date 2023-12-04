@@ -10,22 +10,39 @@ from movement_table import *
 
 
 class MovementMode(Enum):
-    MOVEMENT_STANDBY = 0
+    MOVEMENT_STANDBY = (0, "Standby")
 
-    MOVEMENT_FORWARD = 1
-    MOVEMENT_FORWARDFAST = 2
-    MOVEMENT_BACKWARD = 3
-    MOVEMENT_TURNLEFT = 4
-    MOVEMENT_TURNRIGHT = 5
-    MOVEMENT_SHIFTLEFT = 6
-    MOVEMENT_SHIFTRIGHT = 7
-    MOVEMENT_CLIMB = 8
-    MOVEMENT_ROTATEX = 9
-    MOVEMENT_ROTATEY = 10
-    MOVEMENT_ROTATEZ = 11
-    MOVEMENT_TWIST = 12
+    MOVEMENT_FORWARD = (1, "Forward")
+    MOVEMENT_FORWARDFAST = (2, "Run")
+    MOVEMENT_BACKWARD = (3, "Backward")
+    MOVEMENT_TURNLEFT = (4, "TurnLeft")
+    MOVEMENT_TURNRIGHT = (5, "TurnRight")
+    MOVEMENT_SHIFTLEFT = (6, "ShiftLeft")
+    MOVEMENT_SHIFTRIGHT = (7, "ShiftRight")
+    MOVEMENT_CLIMB = (8, "Climb")
+    MOVEMENT_ROTATEX = (9, "RotateX")
+    MOVEMENT_ROTATEY = (10, "RotateY")
+    MOVEMENT_ROTATEZ = (11, "RotateZ")
+    MOVEMENT_TWIST = (12, "Twist")
 
-    MOVEMENT_TOTAL = 13
+    MOVEMENT_TOTAL = (13, "")
+
+    def __new__(cls, value, label):
+        obj = object.__new__(cls)
+        obj._value_ = value
+        obj.label = label
+        return obj
+
+    @staticmethod
+    def __get_enum_value(label):
+        for member in MovementMode:
+            if member.label.lower() == label.lower():
+                return member.value
+        raise ValueError(f"No such label '{label}' in {MovementMode.__name__}")
+
+    @staticmethod
+    def get_value(label):
+        return MovementMode.__get_enum_value(label)
 
 
 k_table = [standby_table,
@@ -80,3 +97,8 @@ class Movement(object):
         self.__remain_time -= elapsed
 
         return self.__position
+
+
+if __name__ == '__main__':
+    print(MovementMode.MOVEMENT_STANDBY.value)
+    print(MovementMode.get_value("Climb"))
