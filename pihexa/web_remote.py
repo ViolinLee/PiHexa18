@@ -6,8 +6,8 @@ from movement import MovementMode
 
 
 class WebRemote:
-    def __init__(self, mode, auto_start=True):
-        self.mode = mode
+    def __init__(self, auto_start=True):
+        self.mode = MovementMode.MOVEMENT_STANDBY.value
         self.url_path = r"/api/remote/(.*)"
 
         if auto_start:
@@ -59,7 +59,7 @@ class WebRemote:
 
 
 if __name__ == '__main__':
-    my_class_instance = WebRemote('standby')
+    my_class_instance = WebRemote()
 
     print("Server started!")
     while True:
