@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control Interface</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+    <h1>Control</h1>
+    <!-- todo layout-->
+    <div id="buttons">
+        <button id="rotate_x_btn">RotateX</button>
+        <button id="rotate_y_btn">RotateY</button>
+        <button id="rotate_z_btn">RotateZ</button>
+        <button id="twist_btn">Twist</button>
+        <button id="turn_left_btn">TurnLeft</button>
+        <button id="turn_right_btn">TurnRight</button>
+        <button id="run_btn">Run</button>
+        <button id="forward_btn">Forward</button>
+        <button id="climb_btn">Climb</button>
+        <button id="shift_left_btn">ShiftLeft</button>
+        <button id="shift_right_btn">ShiftRight</button>
+        <button id="backward_btn">Backward</button>
+    </div>
+
+    <script>
+        $(document).ready(function(){
+            var socket = io.connect('http://' + document.domain + ':' + location.port);
+
+            // Button Callback Binding
+            $('#rotate_x_btn').click(function(){
+                socket.emit('command', {'mode': 'RotateX'});
+            });
+
+            $('#rotate_y_btn').click(function(){
+                socket.emit('command', {'mode': 'RotateY'});
+            });
+        });
+    </script>
+</body>
+</html>
